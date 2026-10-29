@@ -1,0 +1,1352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design Your Custom Home — Bill Harvey Custom Builder (Demo)</title>
+<style>
+  :root{
+    --navy:#1c2f45; --navy2:#243c57; --timber:#7d4524; --timber2:#9a5a30; --gold:#d9a441;
+    --ink:#1f2b36; --muted:#56616a; --paper:#f5f0e6; --card:#fbf8f2; --line:#ddd3c2;
+    --wrap:1220px; --focus:#c0773f;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif;font-variant-numeric:lining-nums;line-height:1.5;overflow-x:hidden}
+  h1,h2,h3,h4{margin:0;font-weight:normal;color:var(--navy)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{width:min(var(--wrap),100% - 40px);margin:0 auto}
+  button,input,select,textarea{font:inherit}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip{position:absolute;left:12px;top:-60px;z-index:200;background:#fff;color:var(--navy);padding:10px 16px;border-radius:999px}
+  .skip:focus{top:10px}
+
+  /* demo ribbon */
+  .demo-bar{background:var(--gold);color:#25190a;font:600 13px "Segoe UI",Arial,sans-serif;text-align:center;padding:7px 16px;letter-spacing:.02em}
+
+  /* header (matches main site) */
+  header{position:sticky;top:0;z-index:50;background:var(--navy)}
+  .hbar{display:flex;align-items:center;justify-content:space-between;height:86px}
+  .brand{display:flex;align-items:center;gap:16px;color:#fff}
+  .brand .t1{font-size:17px;letter-spacing:.16em}
+  .brand .t2{font-size:11.5px;letter-spacing:.2em;margin-top:2px;opacity:.9}
+  .brand .t3{font-size:9.5px;letter-spacing:.3em;margin-top:5px;opacity:.75;display:flex;align-items:center;gap:10px}
+  .brand .t3::before,.brand .t3::after{content:"";height:1px;width:46px;background:rgba(255,255,255,.5)}
+  nav.main{display:flex;gap:28px}
+  nav.main a{color:#e2e8ee;font-size:16px;padding:6px 0;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
+  nav.main a:hover{color:#fff}
+  nav.main a.on{color:#fff;border-color:#c0773f}
+  header a:focus-visible,header button:focus-visible{outline-color:#e8b07a}
+  .burger{display:none;background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:6px;padding:8px 12px;cursor:pointer;white-space:nowrap}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 28px;border-radius:999px;color:#fff;font-size:16px;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s;line-height:1.2}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(28,47,69,.25)}
+  .btn.n{background:var(--navy)} .btn.t{background:var(--timber)}
+  .btn.o{background:transparent;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn.sm{padding:9px 18px;font-size:15px}
+  .btn[disabled]{opacity:.4;cursor:default;transform:none;box-shadow:none}
+  .arrow::after{content:"→";font-size:18px}
+  .back::before{content:"←";font-size:18px}
+
+  .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  .note{font:13px "Segoe UI",sans-serif;color:var(--muted);margin-top:10px}
+
+  /* intro */
+  .intro{text-align:center;padding:42px 0 34px;
+    background:
+      radial-gradient(ellipse 260px 36px at 12% 30%, rgba(255,255,255,.7), transparent 70%),
+      radial-gradient(ellipse 300px 40px at 86% 24%, rgba(255,255,255,.65), transparent 70%),
+      linear-gradient(#78a5d2 0%, #a9c8e4 45%, #d3e1ec 80%, var(--paper) 100%)}
+  .intro .k{color:#6e3e20}
+  .intro h1{font-size:clamp(34px,4.4vw,58px);line-height:1.06;font-weight:bold;margin-top:10px;text-shadow:0 1px 24px rgba(255,255,255,.55)}
+  .intro p{font-size:clamp(16.5px,1.4vw,19px);max-width:720px;margin:14px auto 0;color:#1f2f40}
+
+  /* builder layout */
+  .builder{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(0,1fr);gap:30px;align-items:start;padding-top:8px}
+  .stage{position:sticky;top:102px}
+  .art{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 14px 40px rgba(28,47,69,.14)}
+  .art svg{display:block;width:100%;height:auto;background:#a9c8e4}
+  .art figcaption{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 16px;font:12.5px "Segoe UI",sans-serif;color:var(--muted);border-top:1px solid var(--line)}
+  .sumcard{margin-top:14px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px 20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 22px;align-items:center}
+  .sumline{font-size:17px;color:var(--navy);line-height:1.4}
+  .ballpark .k{color:var(--timber)}
+  .bp{font-size:26px;color:var(--navy);line-height:1.2;margin-top:2px;white-space:nowrap}
+  .bpnote{font:12.5px "Segoe UI",sans-serif;color:#6a5321;background:#fff8e6;border:1px dashed #d9b46a;border-radius:6px;padding:6px 10px;margin-top:8px}
+  .stage-actions{display:flex;gap:10px;flex-wrap:wrap;grid-column:1/-1;align-items:center;margin-top:6px}
+  .status{font:13px "Segoe UI",sans-serif;color:#2f5a2a;min-height:1em}
+  .manual-link{flex:1 1 100%;width:100%;margin-top:8px;padding:9px 12px;border:1px solid #cbbfa9;border-radius:6px;font:13px "Segoe UI",sans-serif;color:var(--ink);background:#fff}
+  .manual-link:focus{outline:2px solid var(--focus);outline-offset:1px}
+  .lbls text{font:600 12.5px "Segoe UI",Arial,sans-serif;letter-spacing:1px}
+
+  /* options panel */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:24px 26px}
+  .opts{scroll-margin-top:100px}
+  .stepper{list-style:none;margin:0 0 18px;padding:0 0 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border-bottom:1px solid var(--line)}
+  .stp{width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;border-radius:8px;padding:4px 2px;cursor:pointer;color:var(--muted);font-size:13.5px;line-height:1.2;text-align:center}
+  .stp .n{width:32px;height:32px;border-radius:50%;border:1.5px solid #bfae95;display:grid;place-items:center;color:var(--navy);background:#fff;font-size:15px}
+  .stp.done .n{background:var(--navy);border-color:var(--navy);color:#fff}
+  .stp[aria-current="step"]{color:var(--navy)}
+  .stp[aria-current="step"] .n{background:var(--timber);border-color:var(--timber);color:#fff;box-shadow:0 0 0 4px rgba(125,69,36,.15)}
+  .stp:hover .n{border-color:var(--timber)}
+  .pane-h{font-size:24px;margin:0 0 4px;outline:none}
+  .pane-sub{margin:0 0 18px;color:#3a454f;font-size:15px}
+  fieldset{border:0;padding:0;margin:0 0 20px;min-width:0}
+  legend,.flabel{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;padding:0;display:block}
+  .hint{font:13px "Segoe UI",sans-serif;color:var(--muted);margin:8px 0 0}
+  .hint.warn{color:#7a4a12}
+
+  .grid1{display:grid;gap:10px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .opt{position:relative;display:block;cursor:pointer;margin:0}
+  .opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+  .ob{display:flex;gap:14px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:11px 14px;height:100%;transition:border-color .15s,background .15s,box-shadow .15s}
+  .ob.col{flex-direction:column;text-align:center;gap:8px;padding:12px 8px}
+  .opt:hover .ob{border-color:#bfae95}
+  .opt input:checked + .ob{border-color:var(--timber);box-shadow:inset 0 0 0 1px var(--timber);background:#fffaf3}
+  .opt input:focus-visible + .ob{outline:3px solid var(--focus);outline-offset:2px}
+  .ob b{display:block;font-weight:normal;font-size:16.5px;color:var(--navy);line-height:1.25}
+  .ob small{display:block;font-size:13.5px;color:#4a555e;line-height:1.35;margin-top:2px}
+  .ob svg.ic{flex:0 0 auto;color:var(--navy)}
+  .opt input:checked + .ob svg.ic{color:var(--timber)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip .ob{border-radius:999px;padding:7px 15px;justify-content:center;min-width:50px;font-size:15.5px;color:var(--navy)}
+  .chip input:checked + .ob{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:none}
+  .dots{display:flex;gap:4px}
+  .dots i{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.18);display:block}
+  .box{flex:0 0 22px;width:22px;height:22px;border-radius:5px;border:1.5px solid #bfae95;display:grid;place-items:center;color:#fff;font:700 13px "Segoe UI",sans-serif;background:#fff}
+  .opt input:checked + .ob .box{background:var(--timber);border-color:var(--timber)}
+  .opt input:checked + .ob .box::after{content:"✓"}
+
+  .range-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .range-row output{font-size:22px;color:var(--navy)}
+  input[type=range]{width:100%;accent-color:var(--timber);margin:8px 0 2px;height:28px;cursor:pointer}
+  input[type=range]:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:4px}
+  .ticks{display:flex;justify-content:space-between;font:12px "Segoe UI",sans-serif;color:var(--muted)}
+
+  .stepnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;padding-top:16px;border-top:1px solid var(--line)}
+  .stepnav .of{font:13px "Segoe UI",sans-serif;color:var(--muted);text-align:center}
+
+  /* review */
+  table.spec{width:100%;border-collapse:collapse;font-size:15.5px;margin:0 0 16px}
+  table.spec th{text-align:left;font-weight:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 12px 9px 0;border-bottom:1px solid var(--line);vertical-align:top;width:34%}
+  table.spec td{padding:9px 0;border-bottom:1px solid var(--line);color:var(--ink)}
+  .revbp{background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-bottom:14px}
+  .revbp .bp{font-size:24px;white-space:normal}
+  .revbp .per{font:13px "Segoe UI",sans-serif;color:var(--muted);margin-top:2px}
+  .rev-actions{display:flex;flex-wrap:wrap;gap:10px}
+
+  /* send form */
+  section.block{padding:56px 0 0}
+  .send-sec{scroll-margin-top:96px}
+  .shead{display:flex;align-items:center;gap:28px;margin-bottom:22px}
+  .shead h2{font-size:clamp(30px,3vw,42px);font-weight:bold}
+  .shead .rule{flex:1;height:1px;background:#b9ab95}
+  .lede{font-size:17.5px;color:#34404a;max-width:760px;margin:0 0 26px}
+  .split{display:grid;grid-template-columns:1.25fr 1fr;gap:36px;align-items:start}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  .field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1px solid #cbbfa9;border-radius:6px;background:#fff;color:var(--ink);font-size:16px}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--focus);outline-offset:1px;border-color:transparent}
+  .field textarea{min-height:110px;resize:vertical}
+  .req{color:var(--timber)}
+  .attach{background:#fff;border:1px solid var(--line);border-left:4px solid var(--timber);border-radius:6px;padding:14px 16px;margin:4px 0 18px}
+  .attach pre{margin:6px 0 0;white-space:pre-wrap;word-break:break-word;font:14px/1.55 Georgia,serif;color:#2b3640}
+  .sent{display:none;background:#e3eedf;border:1px solid #b7cfae;color:#2f5a2a;border-radius:6px;padding:16px 18px;font-size:15.5px;margin-top:14px}
+  .sent.on{display:block}
+  .side{background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .side img{height:170px;width:100%;object-fit:cover}
+  .side .tx{padding:20px 24px 22px}
+  .side h3{font-size:21px;margin-bottom:10px}
+  .nxt{list-style:none;margin:0 0 16px;padding:0;counter-reset:s}
+  .nxt li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:12px;padding:7px 0;font-size:15px;color:#3a454f}
+  .nxt li::before{content:counter(s);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--timber);color:#fff;font-size:14px}
+  .nxt b{font-weight:normal;color:var(--navy);display:block;font-size:16px}
+  .ccard{border-top:1px solid var(--line);padding-top:14px;font-size:15px;color:#3a454f}
+  .ccard p{margin:2px 0}
+
+  footer{margin-top:64px;background:var(--navy);color:#cfd7df;padding:34px 0 24px}
+  .fin{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px}
+  footer h5{margin:0 0 10px;font-size:16px;font-weight:normal;color:#fff}
+  footer p{margin:2px 0;font-size:14px}
+  footer a:hover{color:#fff;text-decoration:underline}
+  footer a:focus-visible{outline-color:#e8b07a}
+  .fine{margin-top:24px;padding-top:16px;border-top:1px solid #3b5068;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;letter-spacing:.05em;color:#9fb0c0}
+
+  .smoke{opacity:0;transform-box:fill-box;transform-origin:center;animation:puff 4.5s ease-out infinite}
+  .smoke.b{animation-delay:1.5s}.smoke.c{animation-delay:3s}
+  @keyframes puff{0%{opacity:0;transform:translate(0,0) scale(.6)}20%{opacity:.5}100%{opacity:0;transform:translate(4px,-10px) scale(2)}}
+  @media (prefers-reduced-motion:reduce){.smoke{animation:none;opacity:.35}html{scroll-behavior:auto}}
+
+  .print-only{display:none}
+
+  /* header collapses a little earlier than the main site: one extra nav link */
+  @media (max-width:1120px){
+    nav.main{display:none;position:absolute;top:86px;left:0;right:0;background:var(--navy);flex-direction:column;gap:0;padding:6px 20px 16px;border-top:1px solid #33475e}
+    nav.main.open{display:flex}
+    nav.main a{padding:12px 0;border-bottom:1px solid #2c4058}
+    nav.main a.on{border-color:#2c4058;color:#e8b07a}
+    .burger{display:block}
+  }
+  /* tablet */
+  @media (max-width:980px){
+    .builder,.split{grid-template-columns:minmax(0,1fr)}
+    .stage{position:static}
+    .fin{grid-template-columns:1fr 1fr}
+  }
+  /* phone */
+  @media (max-width:620px){
+    .brand .t1{font-size:13px;letter-spacing:.1em} .brand .t2{font-size:9.5px;letter-spacing:.12em} .brand .t3{display:none}
+    .brand svg{width:42px;height:42px}
+    .hbar{height:72px} nav.main{top:72px}
+    .intro{padding:30px 0 24px}
+    .panel{padding:20px 16px}
+    .sumcard{grid-template-columns:minmax(0,1fr);padding:14px 16px}
+    .bp{font-size:23px;white-space:normal}
+    .lbls{display:none}
+    .grid3{grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .ob.col{padding:10px 4px}
+    .ob.col b{font-size:14.5px}
+    .stp{font-size:12px}
+    .stepnav .btn{padding:11px 18px;font-size:15px}
+    .row2,.fin{grid-template-columns:1fr}
+    .shead .rule{display:none}
+    .art figcaption{padding:8px 12px}
+  }
+  @media (max-width:400px){
+    .grid2.pal{grid-template-columns:1fr}
+    .stepnav .of{display:none}
+  }
+
+  /* print: drawing + spec summary only */
+  @media print{
+    @page{margin:12mm}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{background:#fff}
+    .demo-bar{background:#fff;border:1px solid #999;border-radius:4px;margin-bottom:8px}
+    header,.intro,.opts,.send-sec,footer,.sumcard,.skip,.no-print{display:none!important}
+    .wrap{width:100%}
+    .builder{display:block;padding:0}
+    .stage{position:static}
+    .art{box-shadow:none;break-inside:avoid}
+    .lbls{display:inline}
+    .smoke{animation:none;opacity:.35}
+    .print-only{display:block!important}
+    #printSpec{margin-top:10px;break-inside:avoid}
+    #printSpec h2{font-size:22px;margin:8px 0 6px}
+    #printSpec .pr-head{font:12px "Segoe UI",sans-serif;color:#444;letter-spacing:.04em}
+    #printSpec table.spec{font-size:13px;margin-bottom:8px}
+    #printSpec table.spec th,#printSpec table.spec td{padding:5px 10px 5px 0}
+    #printSpec .bpline{font-size:16px;color:var(--navy)}
+    #printSpec .link{font:11px "Segoe UI",sans-serif;word-break:break-all;color:#444}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#builder">Skip to the designer</a>
+
+<div class="demo-bar">Demo site — sample content. Forms do not send anything, and contact details are placeholders.</div>
+
+<header>
+  <div class="wrap hbar">
+    <a class="brand" href="../index.html#home" aria-label="Rock Creek Developments and Bill Harvey Custom Builder, home">
+      <svg width="52" height="52" viewBox="0 0 54 54" aria-hidden="true">
+        <circle cx="27" cy="27" r="25.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+        <path d="M9 36 L20 21 L25 27 L32 15 L45 36 Z" fill="#fff"/>
+        <path d="M29.4 19.4 L32 15 L34.8 19.8 L32.6 18.6 L31 20.4 Z" fill="#1c2f45"/>
+        <path d="M17.6 24.4 L20 21 L22.2 23.8 L20.4 23.2 Z" fill="#1c2f45"/>
+      </svg>
+      <div>
+        <div class="t1">ROCK CREEK DEVELOPMENTS</div>
+        <div class="t2">&amp; BILL HARVEY CUSTOM BUILDER</div>
+        <div class="t3">BAKER CITY, OREGON</div>
+      </div>
+    </a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mainnav">☰ Menu</button>
+    <nav class="main" id="mainnav" aria-label="Main">
+      <a href="../index.html#home">Home</a><a href="../index.html#leasing">Leasing</a><a href="../index.html#building">Building</a>
+      <a href="../index.html#work">Our Work</a><a href="../index.html#about">About</a><a href="./" class="on" aria-current="page">Design a Home</a><a href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <div class="wrap">
+      <div class="k">Bill Harvey Custom Builder, Inc.</div>
+      <h1>Design your custom home.</h1>
+      <p>Pick a style, a size, and an exterior, and watch the house take shape under the Elkhorns. When it feels right, send the design to Bill to start a real conversation.</p>
+    </div>
+  </section>
+
+  <div class="wrap builder" id="builder">
+    <!-- ============ LIVE DRAWING ============ -->
+    <section class="stage" aria-label="Your house, drawn live">
+      <figure class="art">
+        <svg id="house" viewBox="0 80 1000 520" role="img" aria-labelledby="hTitle hDesc">
+          <title id="hTitle">Front view of your custom home</title>
+          <desc id="hDesc">A drawing of the house you are designing.</desc>
+        </svg>
+        <figcaption><span>Front elevation · illustrative sketch, not a construction drawing</span><span id="frontage"></span></figcaption>
+      </figure>
+      <div class="sumcard">
+        <div class="sumline" id="sumLine" aria-live="polite"></div>
+        <div class="ballpark">
+          <div class="k">Ballpark · sample pricing</div>
+          <div class="bp" id="bp">—</div>
+        </div>
+        <div class="bpnote" style="grid-column:1/-1">Sample numbers for this demo only. Not a quote, and not Bill Harvey pricing.</div>
+        <div class="stage-actions no-print">
+          <button type="button" class="btn o sm" data-copy>Copy link</button>
+          <button type="button" class="btn o sm" data-print>Print / Save as PDF</button>
+          <span class="status" role="status" data-copy-status></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OPTIONS ============ -->
+    <section class="opts panel" id="opts" aria-label="Design options">
+      <ol class="stepper" id="stepper">
+        <li><button type="button" class="stp" data-step="1"><span class="n">1</span>Style</button></li>
+        <li><button type="button" class="stp" data-step="2"><span class="n">2</span>Size &amp; Layout</button></li>
+        <li><button type="button" class="stp" data-step="3"><span class="n">3</span>Exterior</button></li>
+        <li><button type="button" class="stp" data-step="4"><span class="n">4</span>Extras &amp; Review</button></li>
+      </ol>
+
+      <form id="cfg" novalidate>
+        <!-- STEP 1 -->
+        <div class="pane" data-pane="1">
+          <h2 class="pane-h" tabindex="-1">Pick a home style</h2>
+          <p class="pane-sub">Each style loads a suggested roof, siding, and colors. You can change any of it on the Exterior step.</p>
+          <fieldset>
+            <legend>Home style</legend>
+            <div class="grid1" id="styleOpts"></div>
+          </fieldset>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="pane" data-pane="2" hidden>
+          <h2 class="pane-h" tabindex="-1">Size &amp; layout</h2>
+          <p class="pane-sub">Set the size and the rooms. The house in the drawing grows with the square footage.</p>
+          <fieldset>
+            <legend>Stories</legend>
+            <div class="chips">
+              <label class="opt chip"><input type="radio" name="stories" value="1"><span class="ob">1 story</span></label>
+              <label class="opt chip"><input type="radio" name="stories" value="2"><span class="ob">2 stories</span></label>
+            </div>
+          </fieldset>
+          <div style="margin-bottom:20px">
+            <div class="range-row"><label class="flabel" for="sqft" style="margin:0">Finished square feet</label><output id="sqftOut" for="sqft">—</output></div>
+            <input type="range" id="sqft" name="sqft" min="1200" max="4000" step="50">
+            <div class="ticks" aria-hidden="true"><span>1,200</span><span>2,600</span><span>4,000</span></div>
+            <p class="hint" id="floorHint"></p>
+          </div>
+          <fieldset>
+            <legend>Bedrooms</legend>
+            <div class="chips" id="bedOpts"></div>
+            <p class="hint" id="bedHint" aria-live="polite"></p>
+          </fieldset>
+          <fieldset>
+            <legend>Bathrooms</legend>
+            <div class="chips" id="bathOpts"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Garage (attached)</legend>
+            <div class="chips">
+              <label class="opt chip"><input type="radio" name="garage" value="0"><span class="ob">None</span></label>
+              <label class="opt chip"><input type="radio" name="garage" value="2"><span class="ob">2-car</span></label>
+              <label class="opt chip"><input type="radio" name="garage" value="3"><span class="ob">3-car</span></label>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="pane" data-pane="3" hidden>
+          <h2 class="pane-h" tabindex="-1">Exterior</h2>
+          <p class="pane-sub">Roof, pitch, siding, and colors. Watch the drawing as you go.</p>
+          <fieldset>
+            <legend>Roof</legend>
+            <div class="grid3" id="roofOpts"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Roof pitch (rise per 12 in. of run)</legend>
+            <div class="chips" id="pitchOpts"></div>
+            <p class="hint">A steeper roof sheds snow faster and gives more attic or loft room.</p>
+          </fieldset>
+          <fieldset>
+            <legend>Siding &amp; exterior</legend>
+            <div class="grid2" id="sidingOpts"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Color palette</legend>
+            <div class="grid2 pal" id="colorOpts"></div>
+          </fieldset>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="pane" data-pane="4" hidden>
+          <h2 class="pane-h" tabindex="-1">Extras &amp; review</h2>
+          <p class="pane-sub">A few things that earn their keep in an Eastern Oregon winter.</p>
+          <fieldset>
+            <legend>Extras</legend>
+            <div class="grid1" id="extraOpts"></div>
+          </fieldset>
+          <h3 style="font-size:20px;margin:6px 0 10px">Your design</h3>
+          <table class="spec" id="specTable"></table>
+          <div class="revbp">
+            <div class="k" style="color:var(--timber)">Ballpark range · sample pricing</div>
+            <div class="bp" id="bp2">—</div>
+            <div class="per" id="perSf"></div>
+            <div class="bpnote">Sample pricing for this demo only. It is not a quote and not Bill Harvey's pricing. Real costs depend on the site, the plans, finishes, and the market. Excludes land, site work, well, septic, and permits.</div>
+          </div>
+          <div class="rev-actions">
+            <a class="btn t arrow" href="#send" data-to-send>Send this design to Bill</a>
+            <button type="button" class="btn o sm" data-copy>Copy link</button>
+            <button type="button" class="btn o sm" data-print>Print / Save as PDF</button>
+            <button type="button" class="btn o sm" id="resetBtn">Start over</button>
+          </div>
+          <p class="status" role="status" data-copy-status></p>
+        </div>
+      </form>
+
+      <div class="stepnav">
+        <button type="button" class="btn o back" id="backBtn">Back</button>
+        <span class="of" id="stepOf">Step 1 of 4</span>
+        <button type="button" class="btn t arrow" id="nextBtn">Next</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ SEND TO BILL ============ -->
+  <section class="wrap block send-sec" id="send">
+    <div class="shead"><h2>Send this design to Bill</h2><div class="rule"></div></div>
+    <p class="lede">Add your contact details and a few notes. Your design is attached automatically, so Bill can see what you have in mind before you talk.</p>
+    <div class="split">
+      <div class="panel">
+        <form id="sendForm">
+          <div class="row2">
+            <div class="field"><label for="fName">Name <span class="req" aria-hidden="true">*</span></label><input id="fName" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="fPhone">Phone</label><input id="fPhone" name="phone" type="tel" autocomplete="tel" placeholder="(541) 000-0000"></div>
+          </div>
+          <div class="field"><label for="fEmail">Email <span class="req" aria-hidden="true">*</span></label><input id="fEmail" name="email" type="email" autocomplete="email" required></div>
+          <div class="row2">
+            <div class="field"><label for="fSite">Build site or area</label><input id="fSite" name="site" placeholder="Town, road, or county"></div>
+            <div class="field"><label for="fTime">Timeline</label>
+              <select id="fTime" name="timeline">
+                <option value="">Choose one</option>
+                <option>Just exploring for now</option>
+                <option>Within the next 12 months</option>
+                <option>In 1 to 2 years</option>
+                <option>More than 2 years out</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="fNotes">Notes</label><textarea id="fNotes" name="notes" placeholder="Anything else: the lot, the view, must-haves, questions for Bill."></textarea></div>
+          <div class="attach">
+            <div class="k">Attached: your design</div>
+            <pre id="attachText"></pre>
+            <input type="hidden" name="design" id="designField">
+          </div>
+          <button class="btn n arrow" type="submit">Send this design to Bill</button>
+          <div class="sent" id="sent" role="status" tabindex="-1"></div>
+          <p class="note">Demo form: nothing is sent anywhere, and no data leaves this page.</p>
+        </form>
+      </div>
+      <aside class="side">
+        <img src="../img/hero.jpg" alt="The Elkhorn Mountains above the Baker Valley">
+        <div class="tx">
+          <h3>What happens next</h3>
+          <ol class="nxt">
+            <li><span><b>Talk it through</b>We meet, walk the site, and listen to what you need.</span></li>
+            <li><span><b>Plan &amp; price</b>Plans, a clear estimate, and a schedule you can count on.</span></li>
+            <li><span><b>Build</b>One general contractor running the job from start to finish.</span></li>
+          </ol>
+          <div class="ccard">
+            <p><b style="font-weight:normal;color:var(--navy)">Bill Harvey Custom Builder, Inc.</b></p>
+            <p>Baker City, OR 97814 · CCB # ______</p>
+            <p>(541) 000-0000 · build@example.com</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- print-only spec summary -->
+  <section class="wrap print-only" id="printSpec" aria-hidden="true"></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fin">
+      <div>
+        <h5>Rock Creek Developments &amp; Bill Harvey Custom Builder</h5>
+        <p>Baker City, Oregon 97814</p>
+        <p>(541) 000-0000 &nbsp;|&nbsp; info@example.com</p>
+      </div>
+      <div>
+        <h5>Quick Links</h5>
+        <p><a href="../index.html#home">Home</a> · <a href="../index.html#leasing">Leasing</a> · <a href="../index.html#building">Building</a></p>
+        <p><a href="../index.html#work">Our Work</a> · <a href="../index.html#about">About</a> · <a href="../index.html#contact">Contact</a></p>
+      </div>
+      <div>
+        <h5>Our Values</h5>
+        <p>Quality Construction · Local Roots</p>
+        <p>Integrity · Community Focus</p>
+      </div>
+    </div>
+    <div class="fine">
+      <span>© 2026 Rock Creek Developments, LLC &amp; Bill Harvey Custom Builder, Inc. &nbsp;|&nbsp; Baker City, Oregon</span>
+      <span>Demo site · sample pricing and placeholder contact details</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   SAMPLE PRICING: DEMO ONLY
+   These are made-up SAMPLE numbers so the ballpark range has something
+   to show. They are NOT Bill Harvey Custom Builder prices and are not a
+   quote. Swap in real figures here before launch; nothing else changes.
+   ===================================================================== */
+const SAMPLE_PRICE_PER_SQFT = {     // [low, high] dollars per finished sq ft, base build
+  ranch:     [210, 270],
+  craftsman: [230, 300],
+  farmhouse: [225, 290],
+  lodge:     [260, 340],
+};
+const SAMPLE_ADJUSTMENTS = {
+  twoStoryFactor: 0.95,                                    // multiplier on the base rate for 2 stories
+  roofPerSqFt:   { gable: 0, hip: 4, metal: 8 },           // added $/sq ft
+  pitchPerSqFt:  { 4: 0, 6: 0, 8: 2, 10: 4, 12: 7 },       // added $/sq ft
+  sidingPerSqFt: { lap: 0, bnb: 3, stone: 9, log: 24 },    // added $/sq ft
+  bathOverTwo:   [9000, 15000],                            // per full bath above 2 (a half bath counts half)
+  garage:        { 0: [0, 0], 2: [45000, 68000], 3: [62000, 92000] },
+  extras:        { porch: [16000, 32000], stove: [6000, 11000], shop: [55000, 105000], mud: [14000, 26000] },
+  roundTo: 5000,
+};
+/* ===================================================================== */
+
+const STYLES = {
+  ranch: { name:"Ranch", blurb:"Long, low, single-level living with everything on one floor.",
+    widthK:1.18, oh:1.6, wing:"left", wingK:.30, wingMax:24, porchLen:20, postSpace:8,
+    win:{w:5,h:4,sill:3.1}, mull:"slider", casing:.4, headCap:false, sidelites:false,
+    door:"panel", post:"simple", gable:"vent", gdoor:"panel", masonry:false,
+    preset:{roof:"hip", pitch:6, siding:"lap", color:"slate"} },
+  craftsman: { name:"Craftsman", blurb:"Deep eaves, tapered porch columns, and stone-based details.",
+    widthK:1.05, oh:2.2, wing:"left", wingK:.40, wingMax:26, porchLen:22, postSpace:9,
+    win:{w:3,h:5,sill:2.6}, mull:"cft", casing:.5, headCap:true, sidelites:true,
+    door:"cft", post:"tapered", gable:"shake", gdoor:"carriage", masonry:true, tails:true,
+    preset:{roof:"gable", pitch:6, siding:"stone", color:"sage"} },
+  farmhouse: { name:"Farmhouse", blurb:"Steep gables, board-and-batten, and a wide front porch.",
+    widthK:1.0, oh:1.1, wing:"left", wingK:.36, wingMax:24, porchLen:"full", postSpace:8,
+    win:{w:2.8,h:5.4,sill:2.3}, mull:"farm", casing:.38, headCap:false, sidelites:false,
+    door:"farm", post:"square", gable:"farm", gdoor:"carriage", masonry:false, cupola:true,
+    preset:{roof:"metal", pitch:10, siding:"bnb", color:"white"} },
+  lodge: { name:"Mountain Lodge", blurb:"A big timber gable, lots of glass, and log or stone accents.",
+    widthK:.98, oh:2.6, wing:"center", wingK:.5, wingMax:32, porchLen:"full", postSpace:11,
+    win:{w:3.2,h:5.6,sill:2}, mull:"lodge", casing:.45, headCap:false, sidelites:true,
+    door:"plank", post:"log", gable:"glass", gdoor:"plank", masonry:true,
+    preset:{roof:"gable", pitch:10, siding:"log", color:"timber"} },
+};
+const ROOFS = {
+  gable: { name:"Gable", sub:"Asphalt shingle" },
+  hip:   { name:"Hip", sub:"Asphalt shingle" },
+  metal: { name:"Metal", sub:"Standing-seam gable" },
+};
+const PITCHES = [4, 6, 8, 10, 12];
+const SIDINGS = {
+  lap:   { name:"Lap siding", sub:"Classic horizontal boards" },
+  bnb:   { name:"Board-and-batten", sub:"Tall vertical boards" },
+  stone: { name:"Stone accents", sub:"Stone wainscot, lap above" },
+  log:   { name:"Log & timber", sub:"Full log look, timber trim" },
+};
+const PALETTES = {
+  slate:    { name:"Elkhorn Slate",    note:"Blue-gray, white trim",  body:"#647b8c", trim:"#f2eee6", frame:"#f2eee6", roof:"#3b4047", door:"#7d4524", log:"#8d6646", gdoor:"#f2eee6" },
+  sage:     { name:"Sagebrush",        note:"Sage green, cream trim", body:"#8e9b7b", trim:"#f1ead9", frame:"#f1ead9", roof:"#4a4840", door:"#7d4524", log:"#94683f", gdoor:"#9a6a40" },
+  white:    { name:"Farmhouse White",  note:"White, black windows",   body:"#efebe2", trim:"#f8f6f1", frame:"#25282c", roof:"#2b2e33", door:"#7d4524", log:"#a0764c", gdoor:"#f8f6f1" },
+  barn:     { name:"Barn Red",         note:"Red, white trim",        body:"#8e3a2d", trim:"#f3eee3", frame:"#f3eee3", roof:"#34373c", door:"#1c2f45", log:"#7e5233", gdoor:"#f3eee3" },
+  timber:   { name:"Timber & Cream",   note:"Warm brown, cream trim", body:"#8a5b3b", trim:"#efe4c9", frame:"#3a2a1e", roof:"#3d3a35", door:"#1c2f45", log:"#a8703f", gdoor:"#7a4c2c" },
+  charcoal: { name:"Charcoal & Cedar", note:"Charcoal, cedar accents",body:"#454b50", trim:"#b47b4b", frame:"#1f2326", roof:"#26292c", door:"#b47b4b", log:"#6d4c34", gdoor:"#b47b4b" },
+};
+const EXTRAS = {
+  porch: { name:"Covered front porch", sub:"A dry place for boots, a bench, and the view." },
+  stove: { name:"Wood stove", sub:"Hearth and chimney: steady heat through a long winter." },
+  shop:  { name:"Shop / outbuilding", sub:"A detached shop with a big overhead door." },
+  mud:   { name:"Mudroom", sub:"Between the garage and the house, for snow, mud, and coats." },
+};
+const EXTRA_ORDER = ["porch", "stove", "shop", "mud"];
+const BEDS = [2, 3, 4, 5];
+const BATHS = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+
+const DEFAULT = { style:"craftsman", stories:1, sqft:2200, beds:3, baths:2, garage:2,
+  roof:"gable", pitch:6, siding:"stone", color:"sage", extras:["porch", "mud"] };
+const STORE_KEY = "bhcb-house-design-v1";
+
+let state = clone(DEFAULT);
+let step = 1;
+
+/* ---------------- helpers ---------------- */
+function clone(d){ return JSON.parse(JSON.stringify(d)); }
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+const f2 = n => +(+n).toFixed(2);
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const fmt = n => n.toLocaleString("en-US");
+const money = n => "$" + fmt(Math.round(n));
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function shade(hex, amt){
+  const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = n >> 8 & 255, b = n & 255;
+  const t = amt < 0 ? 0 : 255, p = Math.abs(amt);
+  r = Math.round(r + (t - r) * p); g = Math.round(g + (t - g) * p); b = Math.round(b + (t - b) * p);
+  return "#" + ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
+}
+function rect(x, y, w, h, fill, ex = ""){ return `<rect x="${f2(x)}" y="${f2(y)}" width="${f2(Math.max(0, w))}" height="${f2(Math.max(0, h))}" fill="${fill}" ${ex}/>`; }
+function poly(pts, fill, ex = ""){ return `<polygon points="${pts.map(p => f2(p[0]) + "," + f2(p[1])).join(" ")}" fill="${fill}" ${ex}/>`; }
+function circ(cx, cy, r, fill, ex = ""){ return `<circle cx="${f2(cx)}" cy="${f2(cy)}" r="${f2(r)}" fill="${fill}" ${ex}/>`; }
+function seeded(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+/* ---------------- static backdrop: sky + Elkhorn skyline ---------------- */
+let BACKDROP = "";
+function backdrop(){
+  if (BACKDROP) return BACKDROP;
+  const rnd = seeded(7);
+  const far = [[0,300],[50,284],[95,252],[130,264],[176,214],[206,230],[246,168],[276,192],[300,180],[336,214],[372,200],[410,234],[455,222],[500,242],[540,226],[580,238],[620,206],[656,216],[700,170],[730,184],[762,158],[796,196],[830,188],[870,228],[915,214],[960,248],[1000,240]];
+  const mid = [[0,352],[60,332],[120,344],[190,314],[250,332],[320,306],[390,330],[450,318],[520,338],[590,312],[650,328],[720,302],[790,324],[860,310],[930,332],[1000,320]];
+  const path = pts => pts.map(p => p.join(",")).join(" ");
+  let o = rect(0, 0, 1000, 600, "url(#sky)");
+  o += circ(860, 132, 60, "#fff6dc", 'opacity=".35" filter="url(#soft)"') + circ(860, 132, 20, "#fffaf0", 'opacity=".75"');
+  o += `<g fill="#fff" opacity=".8" filter="url(#soft)">` +
+       [[170,118,120,14],[250,108,70,12],[600,104,130,13],[680,96,60,10],[940,176,70,9],[420,140,70,8]]
+       .map(c => `<ellipse cx="${c[0]}" cy="${c[1]}" rx="${c[2]}" ry="${c[3]}"/>`).join("") + `</g>`;
+  // far range: lavender-gray rock with snow
+  o += `<polygon points="${path(far)} 1000,440 0,440" fill="#9a97aa"/>`;
+  // shadow sides of the peaks
+  for (let i = 1; i < far.length - 1; i++){
+    const p = far[i], a = far[i - 1], b = far[i + 1];
+    if (p[1] < a[1] && p[1] < b[1]){
+      if (p[1] < 226) o += poly([p, b, [p[0] + (b[0] - p[0]) * .25, 360]], "#84819a", 'opacity=".45"');
+      if (p[1] < 236){
+        const t = p[1] < 190 ? .5 : .36;
+        const L = [p[0] + (a[0] - p[0]) * t, p[1] + (a[1] - p[1]) * t];
+        const R = [p[0] + (b[0] - p[0]) * t, p[1] + (b[1] - p[1]) * t];
+        const jag = [];
+        for (let k = 1; k < 5; k++){ const u = k / 5; jag.push([R[0] + (L[0] - R[0]) * u, R[1] + (L[1] - R[1]) * u + (k % 2 ? 9 : -2) + rnd() * 5]); }
+        o += poly([L, p, R, ...jag], "#f5f7fa", 'opacity=".95"');
+        o += poly([p, R, jag[0], jag[1]], "#d9dde8", 'opacity=".8"');
+      }
+    }
+  }
+  o += rect(0, 250, 1000, 200, "url(#haze)");
+  // mid range: forested
+  o += `<polygon points="${path(mid)} 1000,460 0,460" fill="#6f7a6c"/>`;
+  const midY = x => { for (let i = 0; i < mid.length - 1; i++){ const a = mid[i], b = mid[i + 1]; if (x >= a[0] && x <= b[0]) return a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0]); } return 330; };
+  let trees = "";
+  for (let i = 0; i < 260; i++){
+    const x = rnd() * 1000, top = midY(x) + 6, y = top + rnd() * (440 - top), h = 6 + rnd() * 7, w = h * .45;
+    trees += `M${f2(x - w)} ${f2(y)}L${f2(x)} ${f2(y - h)}L${f2(x + w)} ${f2(y)}Z`;
+  }
+  o += `<path d="${trees}" fill="#4f5f4c" opacity=".85"/>`;
+  // golden foothills + valley floor
+  o += `<path d="M0 404 C 120 384, 230 392, 340 400 S 560 390, 690 398 S 900 386, 1000 396 L1000 470 L0 470 Z" fill="#c5ad74"/>`;
+  o += `<path d="M0 424 C 160 414, 300 420, 470 426 S 800 414, 1000 422 L1000 480 L0 480 Z" fill="#d4bf86"/>`;
+  let far2 = "";
+  for (let i = 0; i < 70; i++){
+    const x = rnd() * 1000, y = 412 + rnd() * 26, h = 7 + rnd() * 9, w = h * .4;
+    far2 += `M${f2(x - w)} ${f2(y)}L${f2(x)} ${f2(y - h)}L${f2(x + w)} ${f2(y)}Z`;
+  }
+  o += `<path d="${far2}" fill="#4a5e43" opacity=".9"/>`;
+  o += rect(0, 452, 1000, 148, "url(#yard)");
+  BACKDROP = o;
+  return o;
+}
+
+/* ---------------- the house ---------------- */
+function scene(d){
+  const P = PALETTES[d.color], S = STYLES[d.style];
+  const metalC = shade(P.roof, .12);
+  const F = 1.6, H = 9.5, pitch = d.pitch / 12, OH = S.oh;
+  const two = d.stories === 2;
+  const foot = d.sqft / d.stories;
+  const W = Math.round(Math.sqrt(foot) * 1.32 * S.widthK);
+  const D = clamp(foot / W, 26, 40);
+  const wallTop = F + d.stories * H, yW = -wallTop;
+  const rise = D / 2 * pitch, yR = yW - rise;
+  const drop = Math.min(OH * pitch, 1.2), yE = yW + drop;
+  const hip = d.roof === "hip", metal = d.roof === "metal";
+  const roofFill = metal ? "url(#pMetal)" : "url(#pShingle)";
+  const roofEdge = metal ? metalC : P.roof;
+  const isLog = d.siding === "log", isStone = d.siding === "stone";
+  const wallFill = { lap:"url(#pLap)", bnb:"url(#pBnb)", stone:"url(#pLap)", log:"url(#pLog)" }[d.siding];
+  const trim = P.trim, has = x => d.extras.includes(x);
+  const center = S.wing === "center";
+  let Wg = clamp(W * S.wingK, 16, S.wingMax); if (Wg > W - 10) Wg = Math.max(12, W - 10);
+  const wx0 = center ? (W - Wg) / 2 : 0, wx1 = wx0 + Wg, wcx = (wx0 + wx1) / 2;
+  const wRise = Wg / 2 * pitch, yWA = yW - wRise;
+  const porchOn = has("porch"), mud = has("mud"), shop = has("shop"), stove = has("stove");
+  const G = d.garage, Gw = G === 3 ? 34 : G === 2 ? 24 : 0;
+  const mx0 = W, mx1 = mud ? W + 10 : W, gx0 = mx1, gx1 = gx0 + Gw, gOH = Math.min(OH, 1.6);
+  const sx1 = -12 - OH, sx0 = sx1 - 30;
+  const leftmost = shop ? sx0 - 1 : -OH;
+  const rightmost = G ? gx1 + gOH : (mud ? mx1 + 1.2 : W + OH);
+  const tL = leftmost - 6, tR = rightmost + 6;
+  const extL = tL - 4, extR = tR + 4, totalW = extR - extL;
+  const maxH = wallTop + Math.max(rise, wRise) + 5;
+  const s = Math.min(9, 990 / totalW, 330 / maxH);
+  const GY = 515, X0 = 500 - (extL + extR) / 2 * s;
+
+  /* ---------- pieces ---------- */
+  const corners = (a, b, top, bot) => isLog ? logEnds(a, top, bot, -1) + logEnds(b, top, bot, 1)
+    : rect(a, top, .45, bot - top, trim) + rect(b - .45, top, .45, bot - top, trim);
+  function logEnds(x, top, bot, dir){
+    let o = "";
+    for (let y = bot - .475; y > top + .3; y -= .95)
+      o += circ(x + dir * .2, y, .46, shade(P.log, .18), `stroke="${shade(P.log, -.35)}" stroke-width=".06"`) + circ(x + dir * .2, y, .2, "none", `stroke="${shade(P.log, -.2)}" stroke-width=".05"`);
+    return o;
+  }
+  const wains = (a, b, bot = 0) => isStone ? rect(a, -(F + 2.6), b - a, F + 2.6 + bot, "url(#pStone)") + rect(a - .15, -(F + 2.6) - .28, b - a + .3, .3, "#7c766d") : "";
+  const shadowR = (x, top, bot) => rect(x, top, 1.6, bot - top, "url(#shR)");
+  const eaveShadow = (a, b, y) => rect(a, y, b - a, 1.7, "url(#shD)");
+
+  function win(cx, sill, w, h, n = 1){
+    const gap = .4, tw = n * w + (n - 1) * gap, x = cx - tw / 2, y = -(sill + h), c = S.casing, fr = P.frame, mw = .13;
+    let o = rect(x - c, y - c, tw + 2 * c, h + 2 * c, trim);
+    if (S.headCap) o += rect(x - c - .3, y - c - .42, tw + 2 * c + .6, .42, trim) + rect(x - c - .3, y - c - .05, tw + 2 * c + .6, .06, shade(trim, -.3));
+    o += rect(x - c - .25, -sill + c - .12, tw + 2 * c + .5, .34, trim) + rect(x - c - .25, -sill + c + .2, tw + 2 * c + .5, .07, shade(trim, -.35));
+    for (let i = 0; i < n; i++){
+      const ux = x + i * (w + gap);
+      o += rect(ux, y, w, h, "url(#glass)");
+      o += poly([[ux + w * .1, y + h], [ux + w * .5, y], [ux + w * .74, y], [ux + w * .34, y + h]], "#fff", 'opacity=".2"');
+      if (S.mull === "slider") o += rect(ux + w / 2 - mw / 2, y, mw, h, fr);
+      else if (S.mull === "cft"){ const my = y + h * .42; o += rect(ux, my - mw / 2, w, mw * 1.4, fr) + rect(ux + w / 3 - mw / 2, y, mw, h * .42, fr) + rect(ux + 2 * w / 3 - mw / 2, y, mw, h * .42, fr); }
+      else if (S.mull === "farm") o += rect(ux, y + h / 2 - mw / 2, w, mw * 1.4, fr) + rect(ux + w / 2 - mw / 2, y, mw, h, fr);
+      else if (S.mull === "lodge") o += rect(ux, y + h * .26, w, mw * 1.4, fr);
+      o += rect(ux, y, w, h, "none", `stroke="${fr}" stroke-width=".22"`);
+    }
+    return o;
+  }
+  function door(cx, hood){
+    const w = 3.2, h = 7, x = cx - w / 2, y = -(F + h), sl = S.sidelites ? 1.1 : 0, g = .3, c = .42;
+    const tw = w + (sl ? 2 * (sl + g) : 0), tx = cx - tw / 2, dk = shade(P.door, -.3), lt = shade(P.door, .14);
+    let o = "";
+    if (hood){
+      const hy = y - c - .25, hw = tw / 2 + c + 1.3, hr = Math.max(1.4, hw * .55);
+      o += poly([[cx - hw, hy + .2], [cx, hy - hr], [cx + hw, hy + .2]], roofEdge) + poly([[cx - hw + .5, hy + .2], [cx, hy - hr + .7], [cx + hw - .5, hy + .2]], trim);
+      o += poly([[cx - hw + .4, hy + .2], [cx - hw + .4, hy + 1.3], [cx - hw + 1.4, hy + .2]], trim) + poly([[cx + hw - .4, hy + .2], [cx + hw - .4, hy + 1.3], [cx + hw - 1.4, hy + .2]], trim);
+    }
+    o += rect(tx - c, y - c, tw + 2 * c, h + c, trim);
+    if (S.headCap) o += rect(tx - c - .3, y - c - .42, tw + 2 * c + .6, .42, trim);
+    if (sl){
+      [tx, tx + tw - sl].forEach(sx => { o += rect(sx, y, sl, h * .7, "url(#glass)") + rect(sx, y + h * .7, sl, h * .3, shade(trim, -.08)) + rect(sx, y, sl, h, "none", `stroke="${P.frame}" stroke-width=".16"`); });
+    }
+    o += rect(x, y, w, h, P.door);
+    const pane = (px, py, pw, ph) => rect(px, py, pw, ph, "url(#glass)") + rect(px, py, pw, ph, "none", `stroke="${dk}" stroke-width=".1"`);
+    if (S.door === "cft"){
+      for (let i = 0; i < 3; i++) o += pane(x + .3 + i * .9, y + .4, .72, 1.3);
+      o += rect(x + .2, y + 1.95, w - .4, .22, lt) + rect(x + .35, y + 2.6, w / 2 - .5, h - 3.1, "none", `stroke="${dk}" stroke-width=".1"`) + rect(x + w / 2 + .15, y + 2.6, w / 2 - .5, h - 3.1, "none", `stroke="${dk}" stroke-width=".1"`);
+    } else if (S.door === "farm"){
+      o += pane(x + .35, y + .35, w - .7, h * .44) + rect(x + w / 2 - .05, y + .35, .1, h * .44, dk) + rect(x + .35, y + .35 + h * .22 - .05, w - .7, .1, dk);
+      o += rect(x + .35, y + h * .56, w - .7, h * .38, "none", `stroke="${dk}" stroke-width=".1"`);
+    } else if (S.door === "panel"){
+      for (let r = 0; r < 3; r++) for (let k = 0; k < 2; k++) o += rect(x + .35 + k * (w / 2 - .1), y + .4 + r * (h - .8) / 3, w / 2 - .6, (h - .8) / 3 - .3, "none", `stroke="${dk}" stroke-width=".1"`);
+    } else {
+      for (let px = x + .53; px < x + w - .1; px += .53) o += rect(px, y, .05, h, dk);
+      o += pane(x + w / 2 - .6, y + .7, 1.2, 1.2);
+      o += rect(x, y + 2.3, w * .62, .2, "#2a2522") + rect(x, y + h - 1.4, w * .62, .2, "#2a2522");
+    }
+    o += circ(x + w - .45, y + h * .53, .15, "#d9a441");
+    return o;
+  }
+  function stoop(cx, wide = 5.4){
+    return rect(cx - wide / 2 - .6, -F / 2, wide + 1.2, F / 2, "#a9a397") + rect(cx - wide / 2, -F, wide, F / 2, "#bab4a8");
+  }
+  function bush(cx, r = 1.9){
+    return `<ellipse cx="${f2(cx - r * .6)}" cy="${f2(-r * .55)}" rx="${f2(r * .9)}" ry="${f2(r * .7)}" fill="#4b6640"/><ellipse cx="${f2(cx + r * .5)}" cy="${f2(-r * .5)}" rx="${f2(r * .85)}" ry="${f2(r * .65)}" fill="#557349"/><ellipse cx="${f2(cx)}" cy="${f2(-r * .8)}" rx="${f2(r * .8)}" ry="${f2(r * .7)}" fill="#5f7f50"/>`;
+  }
+  function pine(cx, h){
+    let o = rect(cx - .55, -h * .16, 1.1, h * .16, "#5a4130");
+    for (let i = 0; i < 5; i++){
+      const w = h * .44 * (1 - i * .16), yb = -h * .1 - i * h * .165;
+      o += poly([[cx - w / 2, yb], [cx, yb - h * .33], [cx + w / 2, yb]], i % 2 ? "#466a4e" : "#3c5c45");
+      o += poly([[cx, yb - h * .33], [cx + w / 2, yb], [cx + w * .1, yb]], "#2f4a37", 'opacity=".5"');
+    }
+    return o;
+  }
+  /* roof over a rectangle of wall (side-gable rectangle or hip trapezoid) */
+  function mainRoof(a, b, ywall, rrise, oh, depth, { leftCut = false } = {}){
+    const yEv = ywall + Math.min(oh * pitch, 1.2), yRg = ywall - rrise;
+    const L = leftCut ? a : a - oh, R = b + oh;
+    let o = "";
+    if (!hip){
+      o += rect(L, yRg - .1, R - L, yEv - yRg + .1, roofFill);
+      o += rect(L, yRg - .38, R - L, .38, shade(roofEdge, -.2));
+      if (!leftCut) o += rect(L, yRg - .1, .35, yEv - yRg + .1, trim);
+      o += rect(R - .35, yRg - .1, .35, yEv - yRg + .1, trim);
+    } else {
+      const ins = Math.min(depth / 2 + oh, (R - L) / 2 - .8);
+      const l = leftCut ? L : L + ins;
+      o += poly([[L, yEv], [l, yRg], [R - ins, yRg], [R, yEv]], roofFill);
+      if (!leftCut) o += `<line x1="${f2(L)}" y1="${f2(yEv)}" x2="${f2(l)}" y2="${f2(yRg)}" stroke="${shade(roofEdge, -.35)}" stroke-width=".3"/>`;
+      o += `<line x1="${f2(R)}" y1="${f2(yEv)}" x2="${f2(R - ins)}" y2="${f2(yRg)}" stroke="${shade(roofEdge, -.35)}" stroke-width=".3"/>`;
+      o += rect(l, yRg - .3, R - ins - l, .32, shade(roofEdge, -.2));
+    }
+    o += hip ? poly([[L, yEv], [hip && leftCut ? L : L + Math.min(depth / 2 + oh, (R - L) / 2 - .8), yRg], [R - Math.min(depth / 2 + oh, (R - L) / 2 - .8), yRg], [R, yEv]], "url(#sheen)")
+             : rect(L, yRg, R - L, yEv - yRg, "url(#sheen)");
+    o += rect(L, yEv, R - L, .7, trim) + rect(L, yEv + .7, R - L, .08, shade(trim, -.35));
+    if (S.tails) for (let x = L + .8; x < R - .4; x += 2) o += rect(x, yEv + .7, .32, .5, trim);
+    return o;
+  }
+  /* front-facing gable: wall triangle + rake band */
+  function gable(a, b, ywall, oh, fill){
+    const cx = (a + b) / 2, half = (b - a) / 2, apex = ywall - half * pitch, t = .9, run = (half + oh) * pitch;
+    let o = poly([[a, ywall + .02], [cx, apex], [b, ywall + .02]], fill);
+    o += poly([[a - oh, apex - t + run], [cx, apex - t], [b + oh, apex - t + run], [b + oh, apex + run], [cx, apex], [a - oh, apex + run]], roofEdge);
+    o += poly([[a - oh, apex + run], [cx, apex], [b + oh, apex + run], [b + oh, apex + run + .45], [cx, apex + .45], [a - oh, apex + run + .45]], trim);
+    return o;
+  }
+  function hipFace(a, b, ywall, oh){
+    const cx = (a + b) / 2, yEv = ywall + Math.min(oh * pitch, 1.2), apex = yEv - ((b - a) / 2 + oh) * pitch;
+    return poly([[a - oh, yEv], [cx, apex], [b + oh, yEv]], roofFill) +
+      `<line x1="${f2(a - oh)}" y1="${f2(yEv)}" x2="${f2(cx)}" y2="${f2(apex)}" stroke="${shade(roofEdge, -.35)}" stroke-width=".3"/><line x1="${f2(b + oh)}" y1="${f2(yEv)}" x2="${f2(cx)}" y2="${f2(apex)}" stroke="${shade(roofEdge, -.35)}" stroke-width=".3"/>` +
+      rect(a - oh, yEv, b - a + 2 * oh, .7, trim) + rect(a - oh, yEv + .7, b - a + 2 * oh, .08, shade(trim, -.35));
+  }
+
+  /* ---------- window, door, and porch layout ---------- */
+  const WN = S.win, space = d.style === "ranch" ? 11 : 8.5;
+  const spread = (a, b, w) => {
+    const L = b - a; if (L < w + 1.4) return [];
+    let n = Math.max(1, Math.round(L / space)); n = Math.min(n, Math.floor(L / (w + 1.6))) || 1;
+    return Array.from({ length: n }, (_, i) => a + L * (i + .5) / n);
+  };
+  const postsFor = (a, b, sp) => { const L = b - a; const n = Math.max(1, Math.ceil(L / sp)); return Array.from({ length: n + 1 }, (_, i) => a + L * i / n); };
+  let doorX, posts = [], bays = [], porch = null, doorBay = -1, w1 = [], w2 = [];
+  if (center){
+    doorX = wcx;
+    if (porchOn){
+      porch = { x0: .6, x1: W - .6 };
+      const left = postsFor(1.0, wx0, S.postSpace), right = postsFor(wx1, W - 1.0, S.postSpace);
+      posts = [...left, ...right];
+      for (let i = 0; i < posts.length - 1; i++) bays.push([posts[i], posts[i + 1]]);
+      doorBay = left.length - 1;
+      bays.forEach((b, i) => { if (i !== doorBay && b[1] - b[0] >= WN.w + 1.6) w1.push((b[0] + b[1]) / 2); });
+    } else {
+      w1 = [...spread(.8, wx0 - .6, WN.w), ...spread(wx1 + .6, W - .8, WN.w)];
+    }
+    w2 = [...spread(.8, wx0 - .6, WN.w), ...spread(wx1 + .6, W - .8, WN.w)];
+  } else {
+    if (porchOn){
+      let pEnd = S.porchLen === "full" ? W - 1 : Math.min(W - 1, wx1 + S.porchLen);
+      if (W - 1 - pEnd < 7) pEnd = W - 1;
+      porch = { x0: wx1, x1: pEnd };
+      posts = postsFor(wx1 + .6, pEnd - .3, S.postSpace);
+      for (let i = 0; i < posts.length - 1; i++) bays.push([posts[i], posts[i + 1]]);
+      doorBay = 0;
+      doorX = (bays[0][0] + bays[0][1]) / 2;
+      bays.forEach((b, i) => {
+        if (i === doorBay) return;
+        const bw = b[1] - b[0];
+        if (bw >= 2 * WN.w + 4) { w1.push(b[0] + bw * .3, b[0] + bw * .7); }
+        else if (bw >= WN.w + 1.6) w1.push((b[0] + b[1]) / 2);
+      });
+      w1.push(...spread(pEnd + .8, W - .8, WN.w));
+    } else {
+      doorX = wx1 + 4.4;
+      w1 = spread(doorX + 3.6, W - .8, WN.w);
+    }
+    w2 = spread(wx1 + .8, W - .8, WN.w);
+  }
+  const sill1 = F + WN.sill, sill2 = F + H + 2.6, h2 = Math.min(WN.h, 4.8);
+
+  let o = "";
+  /* background pines (behind the buildings) */
+  o += pine(tL, 34) + pine(tL + 6.5, 25) + pine(tR, 36) + pine(tR - 6, 22);
+  /* ground: shadow, drive, walk */
+  o += `<ellipse cx="${f2((leftmost + rightmost) / 2)}" cy=".25" rx="${f2((rightmost - leftmost) / 2 + 3)}" ry="1.1" fill="#2a2a1a" opacity=".16"/>`;
+  if (G) o += poly([[gx0 + .8, 0], [gx1 - .8, 0], [gx1 + 9, 24], [gx0 - 5, 24]], "#cdbf9c") + poly([[gx0 + .8, 0], [gx1 - .8, 0], [gx1 - .2, 1.2], [gx0 + .2, 1.2]], "#b9aa86");
+  if (shop) o += poly([[sx0 + 2.5, 0], [sx0 + 17.5, 0], [sx0 + 21, 24], [sx0 - 1, 24]], "#cdbf9c");
+  o += poly([[doorX - 2.1, 0], [doorX + 2.1, 0], [doorX + 3.4, 24], [doorX - 3.4, 24]], "#ddd2bb");
+  if (mud) o += poly([[mx0 + 3.2 - 1.5, 0], [mx0 + 3.2 + 1.5, 0], [mx0 + 5.4, 24], [mx0 + 1, 24]], "#ddd2bb");
+
+  /* shop */
+  if (shop){
+    const sw = 13, sp = 4 / 12, sRise = 15 * sp, sa = -sw - sRise, scx = (sx0 + sx1) / 2;
+    o += rect(sx0, -sw, 30, sw, "url(#pRib)");
+    o += poly([[sx0, -sw + .02], [scx, sa], [sx1, -sw + .02]], "url(#pRib)");
+    o += poly([[sx0 - 1.2, -sw + 1.2 * sp - .9 + 0], [scx, sa - .9], [sx1 + 1.2, -sw + 1.2 * sp - .9], [sx1 + 1.2, -sw + 1.2 * sp], [scx, sa], [sx0 - 1.2, -sw + 1.2 * sp]], metalC);
+    o += rect(sx0, -sw, .45, sw, trim) + rect(sx1 - .45, -sw, .45, sw, trim);
+    o += rect(sx0 + 3.6, -12.4, 12.8, 12.4, trim) + rect(sx0 + 4, -12, 12, 12, "url(#pRoll)");
+    o += rect(sx0 + 20, -7.4, 3.6, 7.4, trim) + rect(sx0 + 20.3, -7.1, 3, 7.1, P.door) + circ(sx0 + 22.9, -3.6, .14, "#d9a441");
+    o += win(sx0 + 26.4, 4, 2.6, 2.8);
+    o += rect(scx - 1.2, sa + sRise * .45, 2.4, 1.4, shade(trim, -.08)) + [0, 1, 2].map(i => rect(scx - 1, sa + sRise * .45 + .25 + i * .4, 2, .12, shade(trim, -.4))).join("");
+  }
+
+  /* garage */
+  if (G){
+    const gTop = 10.5, ygW = -gTop, gRise = 12 * pitch;
+    o += rect(gx0, ygW, Gw, gTop, wallFill);
+    o += wains(gx0, gx1);
+    o += corners(gx0 - .3, gx1, ygW, 0).slice(0) ;
+    o += eaveShadow(gx0, gx1, ygW + Math.min(gOH * pitch, 1.2) + .78);
+    o += mainRoof(gx0 - .5, gx1, ygW, gRise, gOH, 24, { leftCut: true });
+    if (S.cupola && !hip){
+      const cx = gx0 + Gw / 2, base = ygW - gRise - .2;
+      o += rect(cx - 1.5, base - 3, 3, 3.2, trim) + [0, 1, 2, 3].map(i => rect(cx - 1.1, base - 2.6 + i * .6, 2.2, .14, shade(trim, -.35))).join("");
+      o += poly([[cx - 2.1, base - 3], [cx, base - 5.2], [cx + 2.1, base - 3]], metalC) + rect(cx - .05, base - 7.2, .1, 2.1, "#2a2522") + poly([[cx, base - 7], [cx + 1.3, base - 6.6], [cx, base - 6.3]], "#2a2522");
+    }
+    const n = G, dw = 9, dh = 8, m = (Gw - n * dw) / (n + 1);
+    for (let i = 0; i < n; i++){
+      const x = gx0 + m + i * (dw + m), gd = P.gdoor, dk = shade(gd, -.22);
+      o += rect(x - .4, -dh - .4, dw + .8, dh + .4, trim) + rect(x, -dh, dw, dh, gd);
+      if (S.gdoor === "panel"){
+        for (let r = 0; r < 4; r++) for (let k = 0; k < 4; k++) o += rect(x + .3 + k * 2.15, -dh + .3 + r * 1.95, 1.85, 1.6, "none", `stroke="${dk}" stroke-width=".1"`);
+      } else if (S.gdoor === "carriage"){
+        for (let k = 0; k < 4; k++) o += rect(x + .4 + k * 2.1, -dh + .45, 1.8, 1.25, "url(#glass)") + rect(x + .4 + k * 2.1, -dh + .45, 1.8, 1.25, "none", `stroke="${dk}" stroke-width=".1"`);
+        for (let px = x + .75; px < x + dw; px += .75) o += rect(px, -dh + 2.1, .05, dh - 2.1, dk);
+        o += rect(x + dw / 2 - .06, -dh, .12, dh, dk) + rect(x + dw / 2 - 1.1, -3.9, .2, 1, "#2a2522") + rect(x + dw / 2 + .9, -3.9, .2, 1, "#2a2522");
+      } else {
+        for (let px = x + .6; px < x + dw; px += .6) o += rect(px, -dh, .05, dh, dk);
+        for (let k = 0; k < 4; k++) o += rect(x + .4 + k * 2.1, -dh + .4, 1.8, 1, "url(#glass)");
+        o += rect(x, -dh + 2.2, 2.2, .22, "#2a2522") + rect(x + dw - 2.2, -dh + 2.2, 2.2, .22, "#2a2522") + rect(x, -1.6, 2.2, .22, "#2a2522") + rect(x + dw - 2.2, -1.6, 2.2, .22, "#2a2522");
+      }
+    }
+  }
+
+  /* mudroom */
+  if (mud){
+    const mTop = F + 8.6, ymW = -mTop;
+    o += rect(mx0, ymW, 10, mTop - F, wallFill) + rect(mx0, -F, 10, F, "#a9a59c") + wains(mx0, mx1);
+    if (!G) o += corners(mx0 - 1, mx1, ymW, -F);
+    o += eaveShadow(mx0, mx1, ymW + Math.min(1.2 * pitch, 1.2) + .78);
+    o += mainRoof(mx0 - 1, mx1 - (G ? .2 : 0), ymW, 7 * pitch, G ? 0 : 1.2, 14, { leftCut: true });
+    const dx = mx0 + 3.2, dy = -(F + 6.8);
+    o += rect(dx - 1.85, dy - .4, 3.7, 6.8 + .4, trim) + rect(dx - 1.45, dy, 2.9, 6.8, P.door) + rect(dx - 1.05, dy + .4, 2.1, 2.6, "url(#glass)") + circ(dx + 1.05, dy + 3.8, .13, "#d9a441");
+    o += stoop(dx, 4);
+    o += win(mx0 + 7.6, F + 3.6, 2.2, 2.8);
+  }
+
+  /* chimney / stove flue (behind the main roof) */
+  let chim = "", smoke = "";
+  if (stove){
+    const cx = center ? wx1 + (W - wx1) * .55 : wx1 + (W - wx1) * .66;
+    let top = yR;
+    if (hip){ const ins = Math.min(D / 2 + OH, (W + 2 * OH) / 2 - .8), xr = W + OH - ins; if (cx > xr) top = yR + (cx - xr) / ins * (yE - yR); }
+    if (S.masonry || isStone || isLog){
+      const ct = top - 3.4;
+      chim = rect(cx - 1.8, ct, 3.6, yE - ct, "url(#pStone)") + rect(cx - 2.15, ct - .45, 4.3, .5, "#6d675f") + rect(cx - .5, ct - 1.4, 1, 1, "#3a3a3a");
+      top = ct - 1.4;
+    } else {
+      const ct = top - 2.8;
+      chim = rect(cx - .38, ct, .76, yE - ct, "#5d646d") + rect(cx - .38, ct, .2, yE - ct, "#7d858f") + rect(cx - .7, top - .4, 1.4, .5, "#4a5058") + rect(cx - .85, ct - .5, 1.7, .25, "#3f454c") + rect(cx - .5, ct - .25, 1, .3, "#3f454c");
+      top = ct - .6;
+    }
+    smoke = ["a", "b", "c"].map(k => circ(cx + .3, top - 1.2, 1.1, "#f4f2ee", `class="smoke ${k}" filter="url(#puffBlur)"`)).join("");
+  }
+
+  /* main body */
+  o += rect(0, yW, W, wallTop - F, wallFill) + rect(0, -F, W, F, "#a9a59c") + wains(0, W);
+  if (two && !isLog) o += rect(-.1, -(F + H) - .3, W + .2, .55, trim);
+  o += corners(0, W, yW, -F);
+  w1.forEach(x => o += win(x, sill1, WN.w, WN.h));
+  if (two) w2.forEach(x => o += win(x, sill2, WN.w, h2));
+  if (!center) o += door(doorX, !porchOn) + (porchOn ? "" : stoop(doorX));
+  o += eaveShadow(0, W, yE + .78);
+  if (!center || hip) o += shadowR(wx1, hip ? yE : yW, -F);
+  o += chim;
+  o += mainRoof(0, W, yW, rise, OH, D);
+
+  /* front wing / gable */
+  o += rect(wx0, yW, Wg, wallTop - F, wallFill) + rect(wx0, -F, Wg, F, "#a9a59c") + wains(wx0, wx1);
+  if (two && !isLog) o += rect(wx0 - .1, -(F + H) - .3, Wg + .2, .55, trim);
+  o += corners(wx0, wx1, yW, -F);
+  if (center){
+    o += door(wcx, !porchOn) + (porchOn ? "" : stoop(wcx));
+    if (Wg >= 18) [-1, 1].forEach(k => o += win(wcx + k * (Wg / 2 - 3.4), F + .2, 2.4, 7.2));
+    if (two) o += win(wcx, sill2 - .6, 2.8, 5.6, Wg >= 22 ? 3 : 2);
+  } else {
+    o += win(wcx, sill1, WN.w, WN.h, Wg >= 22 && WN.w < 4 ? 3 : 2);
+    if (two) o += win(wcx, sill2, WN.w, h2, 2);
+  }
+  if (hip){
+    o += hipFace(wx0, wx1, yW, OH);
+  } else {
+    const gfill = S.gable === "shake" ? "url(#pShake)" : wallFill;
+    o += gable(wx0, wx1, yW, OH, gfill);
+    const ac = yW - wRise * .4;
+    if (S.gable === "glass" && wRise > 4){
+      const gl = [[wx0 + 1.1, yW - .5], [wcx, yWA + 1.3], [wx1 - 1.1, yW - .5]];
+      o += `<clipPath id="gclip"><polygon points="${gl.map(p => f2(p[0]) + "," + f2(p[1])).join(" ")}"/></clipPath>`;
+      o += poly(gl, "url(#glass)");
+      o += `<g clip-path="url(#gclip)">` + poly([[wcx - Wg * .12, yW], [wcx + Wg * .05, yWA], [wcx + Wg * .2, yWA], [wcx + Wg * .03, yW]], "#fff", 'opacity=".2"');
+      for (let x = wx0 + Wg / 6; x < wx1 - .5; x += Wg / 6) o += rect(x - .08, yWA, .16, wRise, P.frame);
+      o += `</g>`;
+      o += rect(wx0, yW - .6, Wg, .7, P.log) + rect(wcx - .35, yWA + 1, .7, wRise - 1.4, P.log);
+      o += `<line x1="${f2(wcx)}" y1="${f2(yW - wRise * .55)}" x2="${f2(wx0 + Wg * .22)}" y2="${f2(yW - .5)}" stroke="${P.log}" stroke-width=".55"/><line x1="${f2(wcx)}" y1="${f2(yW - wRise * .55)}" x2="${f2(wx1 - Wg * .22)}" y2="${f2(yW - .5)}" stroke="${P.log}" stroke-width=".55"/>`;
+      for (let k = 1; k <= 3; k++){ const u = k / 4; [-1, 1].forEach(sg => o += circ(wcx + sg * (Wg / 2 + OH * .6) * u, yWA + 1.2 + (Wg / 2 + OH * .6) * u * pitch, .42, shade(P.log, .15), `stroke="${shade(P.log, -.35)}" stroke-width=".07"`)); }
+    } else if (S.gable === "shake"){
+      [[wx0, -1], [wx1, 1]].forEach(([x, k]) => o += poly([[x, yW + .45], [x - k * OH * .85, yW + OH * .85 * pitch + .45], [x, yW + 2.3]], trim));
+      if (wRise >= 4.5) o += win(wcx, -ac - .8, Math.min(Wg * .32, 5), 1.6);
+    } else if (S.gable === "farm" && wRise >= 5.5){
+      o += win(wcx, -ac - 1.2, 2.2, 2.4);
+    } else if (wRise > 2.6){
+      o += rect(wcx - 1.2, ac - .8, 2.4, 1.6, trim) + [0, 1, 2].map(i => rect(wcx - 1, ac - .55 + i * .45, 2, .14, shade(trim, -.4))).join("");
+    }
+  }
+  if (center && hip) o += eaveShadow(wx0, wx1, yW + Math.min(OH * pitch, 1.2) + .78);
+
+  /* porch */
+  if (porch){
+    const yBB = two ? -(F + 8.4) : -(F + 7.8), yBT = yBB - .85;
+    const yRT = two ? yBT - 2.4 : Math.min(yBT - 1.5, yE - .9);
+    const ax0 = center ? porch.x0 - .7 : porch.x0, ax1 = porch.x1 + .7, span = porch.x1 - porch.x0;
+    const wood = S.post === "log" ? P.log : trim;
+    o += rect(porch.x0, yBB, span, 1.8, "url(#shD)");
+    o += rect(ax0, yRT, ax1 - ax0, yBT - yRT, roofFill) + rect(ax0, yRT - .14, ax1 - ax0, .22, shade(roofEdge, -.3));
+    o += rect(ax0, yBT, ax1 - ax0, .85, S.post === "log" ? P.log : trim) + rect(ax0, yBB, ax1 - ax0, .1, shade(trim, -.35));
+    o += rect(porch.x0 - .2, -F, span + .4, F, "#4a4038");
+    for (let x = porch.x0 + .4; x < porch.x1; x += .9) o += rect(x, -F + .45, .12, F - .45, "#6a5d50");
+    o += rect(porch.x0 - .2, -F, span + .4, .45, wood);
+    // railings (skip the door bay)
+    bays.forEach((b, i) => {
+      if (i === doorBay) return;
+      const a = b[0] + .45, c = b[1] - .45;
+      if (S.post === "log"){
+        o += rect(a, -(F + 3), c - a, .42, P.log) + rect(a, -(F + 1.7), c - a, .36, P.log);
+      } else {
+        o += rect(a, -(F + 3.1), c - a, .24, trim) + rect(a, -(F + .55), c - a, .2, trim);
+        for (let x = a + .35; x < c - .1; x += .55) o += rect(x, -(F + 2.9), .1, 2.4, trim);
+      }
+    });
+    posts.forEach(px => {
+      const ph = -F - yBB;
+      if (S.post === "tapered"){
+        const pier = isStone ? "url(#pStone)" : shade(P.body, -.3);
+        o += rect(px - .85, -(F + 3), 1.7, 3, pier) + rect(px - 1, -(F + 3) - .25, 2, .28, isStone ? "#7c766d" : trim);
+        o += poly([[px - .56, -(F + 3.25)], [px + .56, -(F + 3.25)], [px + .33, yBB], [px - .33, yBB]], trim) + rect(px - .5, yBB, 1, .3, trim);
+      } else if (S.post === "log"){
+        o += rect(px - .5, yBB, 1, ph, P.log) + rect(px - .28, yBB, .2, ph, shade(P.log, .2)) + rect(px + .25, yBB, .14, ph, shade(P.log, -.25));
+        [-1, 1].forEach(k => o += poly([[px + k * .4, yBB + 2.2], [px + k * .4, yBB + 2.9], [px + k * 2.6, yBB + .02], [px + k * 1.8, yBB + .02]], P.log));
+      } else if (S.post === "square"){
+        o += rect(px - .32, yBB, .64, ph, trim) + rect(px - .45, yBB, .9, .3, trim) + rect(px - .45, -F - .4, .9, .4, trim) + rect(px + .18, yBB, .1, ph, shade(trim, -.12));
+      } else {
+        o += rect(px - .26, yBB, .52, ph, trim) + rect(px + .12, yBB, .1, ph, shade(trim, -.15));
+      }
+    });
+    o += door(doorX, false);
+    o += stoop(doorX, 5.6);
+  }
+
+  /* landscaping */
+  const inPorch = x => porch && x > porch.x0 - 1 && x < porch.x1 + 1;
+  [...w1.filter(x => !inPorch(x)), center ? null : wcx].filter(x => x != null).forEach(x => o += bush(x, x === wcx ? 2.4 : 1.9));
+  if (porch){ o += bush(porch.x0 - (center ? 1.4 : -1.6), 1.6); o += bush(porch.x1 + 1.2, 1.7); }
+  o += bush(-1.5, 1.5);
+
+  /* labels (outside the scaled group, in px) */
+  const lx = x => X0 + x * s;
+  const labels = [];
+  labels.push({ x: lx(W / 2), t: `HOUSE · ${fmt(d.sqft)} SQ FT` + (mud && !G ? " + MUDROOM" : "") });
+  if (G) labels.push({ x: lx((mud ? mx0 : gx0) + (gx1 - (mud ? mx0 : gx0)) / 2), t: (mud ? "MUDROOM + " : "") + `${G}-CAR GARAGE` });
+  if (shop) labels.unshift({ x: lx((sx0 + sx1) / 2), t: "SHOP" });
+  labels.forEach(l => l.w = l.t.length * 8.4 + 22);
+  for (let i = 1; i < labels.length; i++){ const a = labels[i - 1], b = labels[i]; const minGap = (a.w + b.w) / 2 + 8; if (b.x - a.x < minGap) b.x = a.x + minGap; }
+  const last = labels[labels.length - 1]; if (last.x + last.w / 2 > 992){ const sh = last.x + last.w / 2 - 992; labels.forEach(l => l.x -= sh); }
+  if (labels[0].x - labels[0].w / 2 < 8){ const sh = 8 - (labels[0].x - labels[0].w / 2); labels.forEach(l => l.x += sh); }
+  const lbl = `<g class="lbls">` + labels.map(l => rect(l.x - l.w / 2, 568, l.w, 22, "rgba(251,248,242,.88)", 'rx="11"') + `<text x="${f2(l.x)}" y="583.5" text-anchor="middle" fill="#2b3640">${esc(l.t)}</text>`).join("") + `</g>`;
+
+  const frontage = Math.round(W + (mud ? 10 : 0) + Gw);
+  return { svg: defs(P, metalC) + backdrop() + `<g transform="translate(${f2(X0)} ${GY}) scale(${f2(s)})">${o}${smoke}</g>` + lbl, frontage };
+}
+
+function defs(P, metalC){
+  const b = P.body, dk = shade(b, -.2), lt = shade(b, .14), r = P.roof, L = P.log;
+  const st = ["#a39d93", "#8e887e", "#b6aea2", "#9a9183"];
+  const stones = [[.06,.06,1.6],[1.78,.06,1.12],[3.02,.06,1.72],[4.86,.06,1.08],[.06,1.26,.9],[1.08,1.26,1.86],[3.06,1.26,1.34],[4.52,1.26,1.42]]
+    .map((s, i) => rect(s[0], s[1], s[2], 1.08, st[i % 4], 'rx=".28"')).join("");
+  return `<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#78a5d2"/><stop offset=".5" stop-color="#b0cce6"/><stop offset=".75" stop-color="#d3e1ec"/></linearGradient>
+  <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6edf2" stop-opacity="0"/><stop offset="1" stop-color="#e6edf2" stop-opacity=".55"/></linearGradient>
+  <linearGradient id="yard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9b97f"/><stop offset=".3" stop-color="#a9ac72"/><stop offset="1" stop-color="#8b9a5e"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6f8fa8"/><stop offset=".55" stop-color="#a9c2d3"/><stop offset="1" stop-color="#dfe9ef"/></linearGradient>
+  <linearGradient id="shR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+  <linearGradient id="shD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+  <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+  <filter id="puffBlur" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation=".45"/></filter>
+  <filter id="soft" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+  <pattern id="pLap" patternUnits="userSpaceOnUse" width="10" height=".6"><rect width="10" height=".6" fill="${b}"/><rect y=".5" width="10" height=".1" fill="${dk}"/><rect width="10" height=".06" fill="${lt}"/></pattern>
+  <pattern id="pBnb" patternUnits="userSpaceOnUse" width="1.4" height="10"><rect width="1.4" height="10" fill="${b}"/><rect width=".24" height="10" fill="${lt}"/><rect x=".24" width=".07" height="10" fill="${dk}"/></pattern>
+  <pattern id="pShake" patternUnits="userSpaceOnUse" width="1.6" height="1.1"><rect width="1.6" height="1.1" fill="${shade(b, -.05)}"/><rect y="1.02" width="1.6" height=".08" fill="${shade(b, -.3)}"/><rect x=".8" width=".06" height=".55" fill="${shade(b, -.25)}"/><rect y=".55" width=".06" height=".55" fill="${shade(b, -.25)}"/><rect y=".5" width="1.6" height=".06" fill="${shade(b, -.18)}"/></pattern>
+  <pattern id="pLog" patternUnits="userSpaceOnUse" width="10" height=".95"><rect width="10" height=".95" fill="${L}"/><rect width="10" height=".2" fill="${shade(L, .16)}"/><rect y=".66" width="10" height=".2" fill="${shade(L, -.22)}"/><rect y=".86" width="10" height=".09" fill="#d9caa6"/></pattern>
+  <pattern id="pStone" patternUnits="userSpaceOnUse" width="6" height="2.4"><rect width="6" height="2.4" fill="#cdc4b4"/>${stones}</pattern>
+  <pattern id="pShingle" patternUnits="userSpaceOnUse" width="3" height="1.4"><rect width="3" height="1.4" fill="${r}"/><rect y=".62" width="3" height=".08" fill="${shade(r, -.35)}"/><rect y="1.32" width="3" height=".08" fill="${shade(r, -.35)}"/><rect width=".06" height=".7" fill="${shade(r, -.3)}"/><rect x="1.5" y=".7" width=".06" height=".7" fill="${shade(r, -.3)}"/><rect x=".5" y=".1" width=".8" height=".4" fill="${shade(r, .07)}"/><rect x="2.1" y=".8" width=".7" height=".4" fill="${shade(r, .05)}"/></pattern>
+  <pattern id="pMetal" patternUnits="userSpaceOnUse" width="1.5" height="10"><rect width="1.5" height="10" fill="${metalC}"/><rect width=".13" height="10" fill="${shade(metalC, .25)}"/><rect x=".13" width=".06" height="10" fill="${shade(metalC, -.35)}"/></pattern>
+  <pattern id="pRib" patternUnits="userSpaceOnUse" width="1.2" height="10"><rect width="1.2" height="10" fill="${shade(b, -.06)}"/><rect width=".2" height="10" fill="${shade(b, .1)}"/><rect x=".2" width=".06" height="10" fill="${shade(b, -.3)}"/></pattern>
+  <pattern id="pRoll" patternUnits="userSpaceOnUse" width="10" height=".5"><rect width="10" height=".5" fill="#d8d6d0"/><rect y=".4" width="10" height=".1" fill="#a9a69e"/></pattern>
+  </defs>`;
+}
+
+/* ---------------- pricing ---------------- */
+function ballpark(d){
+  const A = SAMPLE_ADJUSTMENTS, base = SAMPLE_PRICE_PER_SQFT[d.style];
+  const f = d.stories === 2 ? A.twoStoryFactor : 1;
+  const add = (A.roofPerSqFt[d.roof] || 0) + (A.pitchPerSqFt[d.pitch] || 0) + (A.sidingPerSqFt[d.siding] || 0);
+  let lo = d.sqft * (base[0] * f + add), hi = d.sqft * (base[1] * f + add);
+  const xb = Math.max(0, d.baths - 2); lo += xb * A.bathOverTwo[0]; hi += xb * A.bathOverTwo[1];
+  const g = A.garage[d.garage] || [0, 0]; lo += g[0]; hi += g[1];
+  d.extras.forEach(x => { const e = A.extras[x]; if (e){ lo += e[0]; hi += e[1]; } });
+  const R = A.roundTo;
+  return { lo: Math.floor(lo / R) * R, hi: Math.ceil(hi / R) * R };
+}
+
+/* ---------------- summary text ---------------- */
+function bathText(b){ const full = Math.floor(b), half = b % 1 ? 1 : 0; return `${full} full${half ? " + 1 half" : ""}`; }
+function specRows(d){
+  const S = STYLES[d.style], P = PALETTES[d.color];
+  const roof = d.roof === "metal" ? `Metal standing-seam gable, ${d.pitch}/12 pitch` : `${ROOFS[d.roof].name}, asphalt shingle, ${d.pitch}/12 pitch`;
+  return [
+    ["Style", S.name],
+    ["Stories", d.stories === 2 ? "2 stories" : "1 story"],
+    ["Size", `${fmt(d.sqft)} sq ft` + (d.stories === 2 ? ` (about ${fmt(Math.round(d.sqft / 2 / 10) * 10)} per floor)` : "")],
+    ["Bedrooms", String(d.beds)],
+    ["Bathrooms", bathText(d.baths)],
+    ["Garage", d.garage ? `${d.garage}-car, attached` : "None"],
+    ["Roof", roof],
+    ["Exterior", SIDINGS[d.siding].name],
+    ["Colors", `${P.name} (${P.note.toLowerCase()})`],
+    ["Extras", d.extras.length ? EXTRA_ORDER.filter(x => d.extras.includes(x)).map(x => EXTRAS[x].name).join(", ") : "None"],
+  ];
+}
+function sumLine(d){
+  return [STYLES[d.style].name, d.stories === 2 ? "2 stories" : "1 story", `${fmt(d.sqft)} sq ft`, `${d.beds} bed`, `${d.baths} bath`, d.garage ? `${d.garage}-car garage` : "no garage"].join(" · ");
+}
+function shareURL(){ return location.href.split("#")[0] + "#" + encode(state); }
+function plainSummary(d){
+  const b = ballpark(d);
+  return specRows(d).map(r => `${r[0]}: ${r[1]}`).join("\n") +
+    `\nBallpark (SAMPLE pricing, not a quote): ${money(b.lo)} – ${money(b.hi)}\nDesign link: ${shareURL()}`;
+}
+
+/* ---------------- URL hash encode / decode ---------------- */
+function encode(d){
+  return [`s=${d.style}`, `st=${d.stories}`, `sf=${d.sqft}`, `bd=${d.beds}`, `ba=${d.baths}`, `g=${d.garage}`,
+    `r=${d.roof}`, `p=${d.pitch}`, `sd=${d.siding}`, `c=${d.color}`,
+    `x=${d.extras.length ? EXTRA_ORDER.filter(x => d.extras.includes(x)).join(".") : "none"}`].join("&");
+}
+function decode(str){
+  str = String(str || "").replace(/^#/, "");
+  if (!str.includes("=")) return null;
+  let q; try { q = new URLSearchParams(str); } catch (e) { return null; }
+  const d = clone(DEFAULT); let any = false;
+  const take = (k, ok, conv) => { if (!q.has(k)) return; const v = conv(q.get(k)); if (ok(v)){ any = true; return v; } };
+  const num = v => Number(v), str_ = v => String(v);
+  let v;
+  if ((v = take("s", x => x in STYLES, str_)) !== undefined) d.style = v;
+  if ((v = take("st", x => x === 1 || x === 2, num)) !== undefined) d.stories = v;
+  if ((v = take("sf", x => Number.isFinite(x), num)) !== undefined) d.sqft = clamp(Math.round(v / 50) * 50, 1200, 4000);
+  if ((v = take("bd", x => BEDS.includes(x), num)) !== undefined) d.beds = v;
+  if ((v = take("ba", x => BATHS.includes(x), num)) !== undefined) d.baths = v;
+  if ((v = take("g", x => [0, 2, 3].includes(x), num)) !== undefined) d.garage = v;
+  if ((v = take("r", x => x in ROOFS, str_)) !== undefined) d.roof = v;
+  if ((v = take("p", x => PITCHES.includes(x), num)) !== undefined) d.pitch = v;
+  if ((v = take("sd", x => x in SIDINGS, str_)) !== undefined) d.siding = v;
+  if ((v = take("c", x => x in PALETTES, str_)) !== undefined) d.color = v;
+  if (q.has("x")){ any = true; const raw = q.get("x"); d.extras = raw === "none" ? [] : EXTRA_ORDER.filter(x => raw.split(/[.,\s]/).includes(x)); }
+  return any ? d : null;
+}
+let hashTimer = null, lastHash = "";
+function writeHash(){
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(() => {
+    const h = encode(state); lastHash = h;
+    try { history.replaceState(null, "", "#" + h); } catch (e) { try { location.hash = h; } catch (e2) {} }
+    try { localStorage.setItem(STORE_KEY, h); } catch (e) {}
+  }, 200);
+}
+
+/* ---------------- build the option controls ---------------- */
+const ICONS = {
+  ranch: '<path d="M2 28h52M6 28V17M50 28V17M2 18 9 11h38l7 7"/><path d="M11 28v-6h6v6M24 21h7v4h-7zM37 21h8v4h-8z"/>',
+  craftsman: '<path d="M2 28h52M6 28V16M50 28V16M2 17 14 9l12 8M18 12 26 8h16l10 8"/><path d="M28 28V20h20v8M30 20v8M46 20v8M9 21h8v4H9z"/>',
+  farmhouse: '<path d="M2 28h52M8 28V14M48 28V14M4 16 17 4l13 12M22 9h18l12 8"/><path d="M28 21h22M30 21v7M48 21v7M13 15h7v6h-7z"/>',
+  lodge: '<path d="M2 28h52M8 28V17M48 28V17M4 19 28 3l24 16"/><path d="M14 15v13M22 10v18M34 10v18M42 15v13M14 21h28"/>',
+  gable: '<path d="M6 24 28 6l22 18M10 24v4h36v-4"/>',
+  hip: '<path d="M4 24 18 8h20l14 16zM10 24v4h36v-4"/>',
+  metal: '<path d="M6 24 28 6l22 18M10 24v4h36v-4M16 19v-5M22 14V9M34 14V9M40 19v-5M28 9V5"/>',
+};
+const icon = (k, w = 56, h = 32) => `<svg class="ic" width="${w}" height="${h}" viewBox="0 0 56 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${ICONS[k]}</svg>`;
+function sidingSwatch(k){
+  const base = "#e9e2d4", ln = "#b9ae9b";
+  let inner = `<rect width="64" height="34" fill="${base}"/>`;
+  if (k === "lap") for (let y = 5; y < 34; y += 5) inner += `<rect y="${y}" width="64" height="1.2" fill="${ln}"/>`;
+  if (k === "bnb") for (let x = 3; x < 64; x += 8) inner += `<rect x="${x}" width="2.4" height="34" fill="${ln}"/>`;
+  if (k === "stone"){ for (let y = 4; y < 16; y += 4) inner += `<rect y="${y}" width="64" height="1" fill="${ln}"/>`; inner += `<rect y="16" width="64" height="18" fill="#cdc4b4"/>` + [[1,17,14,7],[16,17,10,7],[27,17,16,7],[44,17,19,7],[1,25,9,8],[11,25,18,8],[30,25,13,8],[44,25,19,8]].map((s, i) => `<rect x="${s[0]}" y="${s[1]}" width="${s[2]}" height="${s[3]}" rx="2" fill="${["#a39d93","#8e887e","#b6aea2","#9a9183"][i % 4]}"/>`).join(""); }
+  if (k === "log"){ inner = `<rect width="64" height="34" fill="#a8703f"/>`; for (let y = 0; y < 34; y += 6) inner += `<rect y="${y}" width="64" height="1.6" fill="#c08a58"/><rect y="${y + 4}" width="64" height="1.4" fill="#7e5230"/><rect y="${y + 5.4}" width="64" height=".6" fill="#e2d3b0"/>`; }
+  return `<svg width="64" height="34" viewBox="0 0 64 34" aria-hidden="true" style="border-radius:4px;border:1px solid #d6ccba">${inner}</svg>`;
+}
+function buildControls(){
+  $("#styleOpts").innerHTML = Object.entries(STYLES).map(([k, S]) =>
+    `<label class="opt"><input type="radio" name="style" value="${k}"><span class="ob">${icon(k)}<span><b>${S.name}</b><small>${S.blurb}</small></span></span></label>`).join("");
+  $("#bedOpts").innerHTML = BEDS.map(n => `<label class="opt chip"><input type="radio" name="beds" value="${n}"><span class="ob">${n}</span></label>`).join("");
+  $("#bathOpts").innerHTML = BATHS.map(n => `<label class="opt chip"><input type="radio" name="baths" value="${n}"><span class="ob">${n}</span></label>`).join("");
+  $("#roofOpts").innerHTML = Object.entries(ROOFS).map(([k, R]) =>
+    `<label class="opt"><input type="radio" name="roof" value="${k}"><span class="ob col">${icon(k, 52, 30)}<span><b>${R.name}</b><small>${R.sub}</small></span></span></label>`).join("");
+  $("#pitchOpts").innerHTML = PITCHES.map(p => `<label class="opt chip"><input type="radio" name="pitch" value="${p}"><span class="ob">${p}/12${p === 4 ? " low" : p === 12 ? " steep" : ""}</span></label>`).join("");
+  $("#sidingOpts").innerHTML = Object.entries(SIDINGS).map(([k, X]) =>
+    `<label class="opt"><input type="radio" name="siding" value="${k}"><span class="ob col">${sidingSwatch(k)}<span><b>${X.name}</b><small>${X.sub}</small></span></span></label>`).join("");
+  $("#colorOpts").innerHTML = Object.entries(PALETTES).map(([k, P]) =>
+    `<label class="opt"><input type="radio" name="color" value="${k}"><span class="ob"><span class="dots" aria-hidden="true"><i style="background:${P.body}"></i><i style="background:${P.trim}"></i><i style="background:${P.roof}"></i><i style="background:${P.door}"></i></span><span><b>${P.name}</b><small>${P.note}</small></span></span></label>`).join("");
+  $("#extraOpts").innerHTML = EXTRA_ORDER.map(k =>
+    `<label class="opt"><input type="checkbox" name="extras" value="${k}"><span class="ob"><span class="box" aria-hidden="true"></span><span><b>${EXTRAS[k].name}</b><small>${EXTRAS[k].sub}</small></span></span></label>`).join("");
+}
+function syncControls(){
+  const f = $("#cfg");
+  ["style", "stories", "beds", "baths", "garage", "roof", "pitch", "siding", "color"].forEach(n => {
+    f.querySelectorAll(`input[name="${n}"]`).forEach(i => i.checked = String(state[n]) === i.value);
+  });
+  f.querySelectorAll('input[name="extras"]').forEach(i => i.checked = state.extras.includes(i.value));
+  $("#sqft").value = state.sqft;
+}
+function readControls(){
+  const f = $("#cfg"), val = n => { const i = f.querySelector(`input[name="${n}"]:checked`); return i ? i.value : null; };
+  state.style = val("style") || state.style;
+  state.stories = Number(val("stories") || state.stories);
+  state.beds = Number(val("beds") || state.beds);
+  state.baths = Number(val("baths") || state.baths);
+  state.garage = Number(val("garage") ?? state.garage);
+  state.roof = val("roof") || state.roof;
+  state.pitch = Number(val("pitch") || state.pitch);
+  state.siding = val("siding") || state.siding;
+  state.color = val("color") || state.color;
+  state.sqft = Number($("#sqft").value);
+  state.extras = [...f.querySelectorAll('input[name="extras"]:checked')].map(i => i.value);
+}
+
+/* ---------------- render everything ---------------- */
+function render(){
+  const d = state, res = scene(d), b = ballpark(d), rows = specRows(d);
+  const svg = $("#house");
+  svg.innerHTML = `<title id="hTitle">Front view of your custom home</title><desc id="hDesc">${esc(sumLine(d))}, ${esc(SIDINGS[d.siding].name.toLowerCase())}, ${esc(PALETTES[d.color].name)} colors${d.extras.length ? ", with " + esc(rows[9][1].toLowerCase()) : ""}, in front of the Elkhorn Mountains.</desc>` + res.svg;
+  $("#frontage").textContent = `About ${res.frontage} ft of frontage`;
+  $("#sumLine").textContent = sumLine(d);
+  const range = `${money(b.lo)} – ${money(b.hi)}`;
+  $("#bp").textContent = range; $("#bp2").textContent = range;
+  $("#perSf").textContent = `About ${money(b.lo / d.sqft)} – ${money(b.hi / d.sqft)} per finished sq ft, all-in (sample)`;
+  $("#specTable").innerHTML = rows.map(r => `<tr><th scope="row">${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("");
+  $("#sqftOut").textContent = `${fmt(d.sqft)} sq ft`;
+  $("#sqft").setAttribute("aria-valuetext", `${fmt(d.sqft)} square feet`);
+  $("#floorHint").textContent = d.stories === 2 ? `About ${fmt(Math.round(d.sqft / 20) * 10)} sq ft on each floor.` : "Everything on one level.";
+  const per = d.sqft / d.beds, bh = $("#bedHint");
+  bh.textContent = per < 450 ? `That is a snug fit: about ${fmt(Math.round(per / 10) * 10)} sq ft per bedroom. Consider more square feet or one less bedroom.` : "";
+  bh.classList.toggle("warn", per < 450);
+  const txt = plainSummary(d);
+  $("#attachText").textContent = txt; $("#designField").value = txt;
+  $("#printSpec").innerHTML = `<div class="pr-head">Bill Harvey Custom Builder, Inc. · Baker City, Oregon · CCB # ______ · Demo site</div>
+    <h2>Custom home design</h2>
+    <table class="spec">${rows.map(r => `<tr><th scope="row">${r[0]}</th><td>${esc(r[1])}</td></tr>`).join("")}</table>
+    <div class="bpline">Ballpark range (sample pricing): ${range}</div>
+    <p class="note">Sample pricing for demonstration only. Not a quote and not Bill Harvey's pricing. Real costs depend on the site, the plans, finishes, and the market.</p>
+    <p class="link">Reopen this design: ${esc(shareURL())}</p>`;
+  writeHash();
+}
+
+/* ---------------- wizard ---------------- */
+function goStep(n, focus = true){
+  step = clamp(n, 1, 4);
+  $$(".pane").forEach(p => p.hidden = Number(p.dataset.pane) !== step);
+  $$(".stp").forEach(b => {
+    const k = Number(b.dataset.step);
+    if (k === step) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+    b.classList.toggle("done", k < step);
+  });
+  $("#backBtn").disabled = step === 1;
+  $("#nextBtn").textContent = step === 4 ? "Send to Bill" : "Next";
+  $("#stepOf").textContent = `Step ${step} of 4`;
+  if (focus){
+    const opts = $("#opts"), top = opts.getBoundingClientRect().top;
+    if (top < 0) opts.scrollIntoView({ block: "start" });
+    const h = $(`.pane[data-pane="${step}"] .pane-h`); if (h) h.focus({ preventScroll: true });
+  }
+}
+function toSend(){
+  $("#send").scrollIntoView({ block: "start" });
+  setTimeout(() => $("#fName").focus({ preventScroll: true }), 350);
+}
+
+/* ---------------- copy link ---------------- */
+async function copyLink(btn){
+  const url = shareURL();
+  const say = m => $$("[data-copy-status]").forEach(s => s.textContent = m);
+  let ok = false;
+  try { if (navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(url); ok = true; } } catch (e) {}
+  if (!ok){
+    try {
+      const ta = document.createElement("textarea"); ta.value = url; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove();
+    } catch (e) {}
+  }
+  $$(".manual-link").forEach(x => x.remove());
+  if (ok){
+    say("Link copied. Anyone with it can open this design.");
+    clearTimeout(copyLink.t); copyLink.t = setTimeout(() => say(""), 5000);
+  } else {
+    say("Your browser blocked copying. Select the link below and copy it.");
+    const box = document.createElement("input");
+    box.className = "manual-link"; box.readOnly = true; box.value = url; box.setAttribute("aria-label", "Link to this design");
+    btn.closest(".stage-actions, .pane").appendChild(box);
+    box.focus(); box.select();
+  }
+}
+
+/* ---------------- wire up ---------------- */
+buildControls();
+(function init(){
+  const fromHash = decode(location.hash);
+  let fromStore = null;
+  if (!fromHash){ try { fromStore = decode(localStorage.getItem(STORE_KEY)); } catch (e) {} }
+  state = fromHash || fromStore || clone(DEFAULT);
+  syncControls(); render();
+  goStep(fromHash ? 4 : 1, false);
+})();
+
+$("#cfg").addEventListener("submit", e => e.preventDefault());
+$("#cfg").addEventListener("change", e => {
+  if (e.target.name === "style"){
+    readControls();
+    Object.assign(state, STYLES[state.style].preset);
+    syncControls();
+  } else readControls();
+  render();
+});
+$("#sqft").addEventListener("input", () => { readControls(); render(); });
+$$(".stp").forEach(b => b.addEventListener("click", () => goStep(Number(b.dataset.step))));
+$("#backBtn").addEventListener("click", () => goStep(step - 1));
+$("#nextBtn").addEventListener("click", () => step === 4 ? toSend() : goStep(step + 1));
+$$("[data-to-send]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); toSend(); }));
+$$("[data-copy]").forEach(b => b.addEventListener("click", () => copyLink(b)));
+$$("[data-print]").forEach(b => b.addEventListener("click", () => window.print()));
+$("#resetBtn").addEventListener("click", () => { state = clone(DEFAULT); syncControls(); render(); goStep(1); });
+window.addEventListener("hashchange", () => {
+  const h = location.hash.replace(/^#/, "");
+  if (h === lastHash) return;
+  const d = decode(h); if (!d) return;
+  state = d; syncControls(); render();
+});
+const burger = $(".burger"), nav = $("nav.main");
+burger.addEventListener("click", () => { const open = nav.classList.toggle("open"); burger.setAttribute("aria-expanded", open); });
+
+$("#sendForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target;
+  if (!f.checkValidity()){ f.reportValidity(); return; }
+  const name = $("#fName").value.trim().split(/\s+/)[0] || "there";
+  const box = $("#sent");
+  box.textContent = `Thanks, ${name}! On the live site, your ${STYLES[state.style].name.toLowerCase()} design and your notes would go to Bill Harvey Custom Builder. This is a demo, so nothing was sent.`;
+  box.classList.add("on"); box.focus();
+  ["fName", "fPhone", "fEmail", "fSite", "fNotes"].forEach(id => $("#" + id).value = ""); $("#fTime").value = "";
+});
+</script>
+</body>
+</html>

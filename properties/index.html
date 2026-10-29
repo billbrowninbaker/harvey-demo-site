@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Properties for Lease — Rock Creek Developments (Demo)</title>
+<meta name="description" content="Sample commercial and residential listings with a map. Demo site.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="properties.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="demo-bar">Demo site — sample listings. Forms do not send anything, and contact details are placeholders.</div>
+
+<header>
+  <div class="wrap hbar">
+    <a class="brand" href="../index.html#home">
+      <svg width="52" height="52" viewBox="0 0 54 54" aria-hidden="true">
+        <circle cx="27" cy="27" r="25.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+        <path d="M9 36 L20 21 L25 27 L32 15 L45 36 Z" fill="#fff"/>
+        <path d="M29.4 19.4 L32 15 L34.8 19.8 L32.6 18.6 L31 20.4 Z" fill="#1c2f45"/>
+        <path d="M17.6 24.4 L20 21 L22.2 23.8 L20.4 23.2 Z" fill="#1c2f45"/>
+      </svg>
+      <div>
+        <div class="t1">ROCK CREEK DEVELOPMENTS</div>
+        <div class="t2">&amp; BILL HARVEY CUSTOM BUILDER</div>
+        <div class="t3">BAKER CITY, OREGON</div>
+      </div>
+    </a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" id="burger">☰ Menu</button>
+    <nav class="main" id="mainNav">
+      <a href="../index.html#home">Home</a><a href="../index.html#leasing">Leasing</a><a href="./" class="on" aria-current="page">Properties</a>
+      <a href="../index.html#building">Building</a><a href="../index.html#work">Our Work</a><a href="../index.html#about">About</a><a href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- ================= LISTINGS ================= -->
+<div class="view" id="v-list">
+  <section class="phead">
+    <div class="wrap-wide phead-in">
+      <div>
+        <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html#home">Home</a> › <a href="../index.html#leasing">Leasing</a> › <span>Properties</span></nav>
+        <div class="k">Rock Creek Developments, LLC</div>
+        <h1>Properties for Lease</h1>
+        <p>Office, retail, warehouse and residential space in Baker City. Pick a property on the map or in the list to see the details.</p>
+      </div>
+      <div class="phead-btns">
+        <a class="btn o sm" href="../index.html#leasing">← Back to Leasing</a>
+        <a class="btn admin-btn sm" href="#admin" title="Admin mode: add, edit and remove listings (demo)">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Admin
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap-wide">
+    <form class="toolbar" id="filters" role="search" onsubmit="return false">
+      <div class="tb-search">
+        <label for="fq" class="vh">Search properties</label>
+        <input id="fq" type="search" placeholder="Search by name, area, feature…" autocomplete="off">
+      </div>
+      <div class="chips" role="group" aria-label="Property type">
+        <button type="button" class="on" data-type="all" aria-pressed="true">All</button>
+        <button type="button" data-type="Office" aria-pressed="false">Office</button>
+        <button type="button" data-type="Retail" aria-pressed="false">Retail</button>
+        <button type="button" data-type="Warehouse/Industrial" aria-pressed="false">Warehouse / Industrial</button>
+        <button type="button" data-type="Residential" aria-pressed="false">Residential</button>
+      </div>
+      <div class="tb-selects">
+        <div><label for="fa">Availability</label>
+          <select id="fa">
+            <option value="any">Any</option>
+            <option value="now">Available now</option>
+            <option value="open">Available now or soon</option>
+            <option value="coming">Coming soon</option>
+            <option value="leased">Leased</option>
+          </select></div>
+        <div><label for="fs">Size</label>
+          <select id="fs">
+            <option value="any">Any size</option>
+            <option value="0-999">Under 1,000 sq ft</option>
+            <option value="1000-2499">1,000 – 2,499 sq ft</option>
+            <option value="2500-4999">2,500 – 4,999 sq ft</option>
+            <option value="5000-">5,000+ sq ft</option>
+          </select></div>
+        <div><label for="fo">Sort by</label>
+          <select id="fo">
+            <option value="avail">Availability (soonest)</option>
+            <option value="size-asc">Size (small to large)</option>
+            <option value="size-desc">Size (large to small)</option>
+            <option value="rent-asc">Rent (low to high)</option>
+            <option value="rent-desc">Rent (high to low)</option>
+          </select></div>
+      </div>
+    </form>
+    <div class="countbar"><span id="count" aria-live="polite"></span><button type="button" class="linkbtn" id="clearF">Clear filters</button></div>
+
+    <div class="browse">
+      <div class="listcol">
+        <div class="cards" id="cards"></div>
+        <div class="empty" id="empty" hidden>
+          <p>No properties match those filters.</p>
+          <button type="button" class="btn o sm" id="clearF2">Clear filters</button>
+        </div>
+        <p class="note">All listings are samples to show how the page works. Rents, sizes and terms are not real offers.</p>
+      </div>
+      <div class="mapcol">
+        <div class="map-box" id="mapBox">
+          <div id="map" class="lmap" role="region" aria-label="Map of properties"></div>
+          <div class="legend" aria-hidden="true"><span><i class="dot available"></i>Available now</span><span><i class="dot coming"></i>Coming soon</span><span><i class="dot leased"></i>Leased</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= DETAIL ================= -->
+<div class="view" id="v-detail">
+  <div class="wrap">
+    <div class="print-head print-only">
+      <div><b>Rock Creek Developments, LLC</b> · Property flyer · Baker City, Oregon</div>
+      <div class="ptag">SAMPLE LISTING · DEMO</div>
+    </div>
+    <nav class="crumbs no-print" aria-label="Breadcrumb"><a href="../index.html#home">Home</a> › <a href="../index.html#leasing">Leasing</a> › <a href="#">Properties</a> › <span id="crumbName"></span></nav>
+    <div id="detailBody"></div>
+
+    <div class="dgrid">
+      <div id="detailMain"></div>
+      <aside class="daside">
+        <div class="panel ask no-print" id="askPanel">
+          <h4>Schedule a showing</h4>
+          <p class="small">or ask about <b id="askName">this space</b>. We'll get back to you.</p>
+          <form id="askForm" novalidate>
+            <div class="seg" role="radiogroup" aria-label="What would you like?">
+              <label><input type="radio" name="want" value="showing" checked> Schedule a showing</label>
+              <label><input type="radio" name="want" value="question"> Ask a question</label>
+            </div>
+            <div class="field"><label for="aName">Name</label><input id="aName" name="name" autocomplete="name" required></div>
+            <div class="row2">
+              <div class="field"><label for="aPhone">Phone</label><input id="aPhone" name="phone" type="tel" autocomplete="tel"></div>
+              <div class="field"><label for="aEmail">Email</label><input id="aEmail" name="email" type="email" autocomplete="email"></div>
+            </div>
+            <div class="row2 showing-only">
+              <div class="field"><label for="aDate">Preferred day</label><input id="aDate" name="date" type="date"></div>
+              <div class="field"><label for="aTime">Time of day</label>
+                <select id="aTime" name="time"><option>Morning</option><option>Midday</option><option>Afternoon</option><option>Any time</option></select></div>
+            </div>
+            <div class="field biz-only"><label for="aUse">Business / intended use</label><input id="aUse" name="use" placeholder="e.g. accounting office, retail shop"></div>
+            <div class="row2">
+              <div class="field"><label for="aMove">Move-in by</label><input id="aMove" name="move" type="date"></div>
+              <div class="field"><label for="aTerm">Lease length</label>
+                <select id="aTerm" name="term"><option>Not sure yet</option><option>1 year</option><option>2–3 years</option><option>5+ years</option></select></div>
+            </div>
+            <div class="field"><label for="aMsg">Message</label><textarea id="aMsg" name="msg" rows="3" placeholder="Questions about the space, terms, or your needs."></textarea></div>
+            <div class="ferr" id="askErr" role="alert"></div>
+            <button class="btn n arrow full" type="submit">Send request</button>
+            <div class="sent" id="askSent" role="status"></div>
+          </form>
+        </div>
+        <div class="panel contact-card">
+          <div class="k">Leasing contact</div>
+          <h4>Rock Creek Developments, LLC</h4>
+          <p>Baker City, OR 97814</p>
+          <p>(541) 000-0000 · leasing@example.com</p>
+          <p class="note">Placeholder contact details.</p>
+        </div>
+        <div class="panel mini no-print">
+          <div id="miniMap" class="lmap mini-map" role="region" aria-label="Location map"></div>
+          <p class="small" id="miniArea"></p>
+          <a class="btn o sm full" id="dirLink" href="#" target="_blank" rel="noopener">Get directions ↗</a>
+          <p class="note">Pins show the general area of a sample listing, not a real address.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ADMIN: LIST ================= -->
+<div class="view" id="v-admin">
+  <div class="admin-bar"><div class="wrap"><b>ADMIN MODE</b> · Demo: changes are saved only in this browser. The real version saves to the company's server and needs a sign-in.</div></div>
+  <section class="wrap block-s">
+    <div class="shead"><h3>Manage Listings</h3><div class="rule"></div><a href="#" class="btn o sm">Exit admin</a></div>
+    <div class="admin-actions">
+      <a class="btn n sm" href="#admin/new">+ Add property</a>
+      <button type="button" class="btn o sm" id="btnExport">Export listings (JSON)</button>
+      <label class="btn o sm filebtn">Import (JSON)<input type="file" id="fileImport" accept="application/json,.json"></label>
+      <button type="button" class="btn o sm danger" id="btnReset">Reset to sample listings</button>
+    </div>
+    <p class="ph-text">Demo: changes are saved only in this browser. The real version saves to the company's server and needs a sign-in.</p>
+    <p class="note" id="storeNote"></p>
+    <div class="alist" id="adminList"></div>
+  </section>
+</div>
+
+<!-- ================= ADMIN: EDIT ================= -->
+<div class="view" id="v-edit">
+  <div class="admin-bar"><div class="wrap"><b>ADMIN MODE</b> · Demo: changes are saved only in this browser. The real version saves to the company's server and needs a sign-in.</div></div>
+  <section class="wrap block-s">
+    <div class="shead"><h3 id="editTitle">Edit Property</h3><div class="rule"></div><a href="#admin" class="btn o sm">← All listings</a></div>
+    <form id="editForm" class="eform" novalidate>
+      <fieldset>
+        <legend>Basics</legend>
+        <div class="g3">
+          <div class="field s2"><label for="e-name">Listing name *</label><input id="e-name" name="name" required placeholder="Sample Office Suite D"></div>
+          <div class="field"><label for="e-type">Type *</label>
+            <select id="e-type" name="type"><option>Office</option><option>Retail</option><option value="Warehouse/Industrial">Warehouse / Industrial</option><option>Residential</option></select></div>
+          <div class="field"><label for="e-suite">Suite / unit</label><input id="e-suite" name="suite" placeholder="Suite D"></div>
+          <div class="field s2"><label for="e-area">Area (general, no street number) *</label><input id="e-area" name="area" required placeholder="Downtown Baker City"></div>
+          <div class="field"><label for="e-status">Availability *</label>
+            <select id="e-status" name="status"><option value="available">Available now</option><option value="coming">Coming soon</option><option value="leased">Leased</option></select></div>
+          <div class="field" id="e-date-wrap"><label for="e-availableDate">Available date</label><input id="e-availableDate" name="availableDate" type="date"></div>
+          <div class="field"><label for="e-sqft">Square feet *</label><input id="e-sqft" name="sqft" type="number" min="0" step="1" required></div>
+          <div class="field"><label for="e-rent">Rent per month ($) *</label><input id="e-rent" name="rent" type="number" min="0" step="1" required></div>
+        </div>
+        <div class="field"><label for="e-description">Description</label><textarea id="e-description" name="description" rows="4"></textarea></div>
+        <div class="field"><label for="e-highlights">Highlights (one per line)</label><textarea id="e-highlights" name="highlights" rows="4"></textarea></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Lease terms</legend>
+        <div class="g3">
+          <div class="field"><label for="e-leaseType">Lease type</label>
+            <select id="e-leaseType" name="leaseType"><option>NNN</option><option>Gross</option><option>Modified gross</option><option>Residential lease</option><option value="">Not set</option></select></div>
+          <div class="field"><label for="e-camPsf">CAM / common area fee ($ per sq ft per month)</label><input id="e-camPsf" name="camPsf" type="number" min="0" step="0.01"></div>
+          <div class="field"><label for="e-camNote">What CAM covers</label><input id="e-camNote" name="camNote"></div>
+          <div class="field"><label for="e-deposit">Deposit</label><input id="e-deposit" name="deposit"></div>
+          <div class="field"><label for="e-minTerm">Minimum term</label><input id="e-minTerm" name="minTerm" placeholder="2 years"></div>
+          <div class="field"><label for="e-utilities">Utilities included</label><input id="e-utilities" name="utilities"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>The space &amp; building</legend>
+        <div class="g3">
+          <div class="field"><label for="e-zoning">Zoning</label><input id="e-zoning" name="zoning"></div>
+          <div class="field"><label for="e-parking">Parking</label><input id="e-parking" name="parking" placeholder="6 shared spaces"></div>
+          <div class="field"><label for="e-ada">ADA access</label><input id="e-ada" name="ada"></div>
+          <div class="field"><label for="e-restrooms">Restrooms</label><input id="e-restrooms" name="restrooms"></div>
+          <div class="field"><label for="e-hvac">Heating / cooling</label><input id="e-hvac" name="hvac"></div>
+          <div class="field"><label for="e-power">Power</label><input id="e-power" name="power" list="powerList" placeholder="Single-phase, 200 A"></div>
+          <div class="field"><label for="e-internet">Internet / fiber</label><input id="e-internet" name="internet"></div>
+          <div class="field"><label for="e-ceiling">Ceiling height</label><input id="e-ceiling" name="ceiling"></div>
+          <div class="field"><label for="e-loading">Loading dock / roll-up doors</label><input id="e-loading" name="loading"></div>
+          <div class="field"><label for="e-signage">Signage rights</label><input id="e-signage" name="signage"></div>
+          <div class="field"><label for="e-i84">Distance to I-84</label><input id="e-i84" name="i84"></div>
+          <div class="field"><label for="e-nearby">Nearby</label><input id="e-nearby" name="nearby"></div>
+        </div>
+        <datalist id="powerList"><option value="Single-phase, 100 A"><option value="Single-phase, 200 A"><option value="3-phase, 200 A"><option value="3-phase, 400 A"></datalist>
+      </fieldset>
+
+      <fieldset id="e-res">
+        <legend>Residential details</legend>
+        <div class="g3">
+          <div class="field"><label for="e-beds">Bedrooms</label><input id="e-beds" name="beds"></div>
+          <div class="field"><label for="e-baths">Bathrooms</label><input id="e-baths" name="baths"></div>
+          <div class="field"><label for="e-pets">Pets</label><input id="e-pets" name="pets"></div>
+          <div class="field s2"><label for="e-appliances">Appliances</label><input id="e-appliances" name="appliances"></div>
+          <div class="field"><label for="e-laundry">Laundry</label><input id="e-laundry" name="laundry"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Photos</legend>
+        <p class="small">Upload photos from this computer. The first photo is the cover. In this demo they stay in this browser only (large photos are shrunk to fit).</p>
+        <div class="ephotos" id="ePhotos"></div>
+        <div class="admin-actions">
+          <label class="btn n sm filebtn">Upload photos<input type="file" id="ePhotoFile" accept="image/*" multiple></label>
+          <button type="button" class="btn o sm" id="eAddSample">Add a sample photo</button>
+        </div>
+        <div class="ferr" id="ePhotoErr" role="alert"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Tours &amp; floor plan</legend>
+        <div class="g3">
+          <div class="field"><label for="e-videoUrl">Video tour link</label><input id="e-videoUrl" name="videoUrl" type="url" placeholder="https://"></div>
+          <div class="field"><label for="e-tourUrl">3D tour link</label><input id="e-tourUrl" name="tourUrl" type="url" placeholder="https://"></div>
+          <div class="field"><label>Floor plan image</label>
+            <div class="fp-row"><label class="btn o sm filebtn">Upload<input type="file" id="eFloorFile" accept="image/*"></label><button type="button" class="linkbtn" id="eFloorClear">Remove</button><span class="small" id="eFloorState"></span></div></div>
+        </div>
+        <p class="small">In the demo, tour links show as a button, not an embedded player.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Map pin *</legend>
+        <p class="small">Click the map to drop the pin (drag it to fine-tune), or type the latitude and longitude.</p>
+        <div class="g3">
+          <div class="field"><label for="e-lat">Latitude</label><input id="e-lat" name="lat" type="number" step="0.00001" min="-90" max="90" required></div>
+          <div class="field"><label for="e-lng">Longitude</label><input id="e-lng" name="lng" type="number" step="0.00001" min="-180" max="180" required></div>
+        </div>
+        <div id="editMap" class="lmap edit-map" role="region" aria-label="Map: click to place the pin"></div>
+      </fieldset>
+
+      <div class="ferr" id="editErr" role="alert"></div>
+      <div class="edit-actions">
+        <button type="submit" class="btn n">Save property</button>
+        <a href="#admin" class="btn o">Cancel</a>
+        <button type="button" class="btn o danger" id="eDelete">Delete property</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fin">
+      <div>
+        <h5>Rock Creek Developments &amp; Bill Harvey Custom Builder</h5>
+        <p>Baker City, Oregon 97814</p>
+        <p>(541) 000-0000 &nbsp;|&nbsp; info@example.com</p>
+      </div>
+      <div>
+        <h5>Quick Links</h5>
+        <p><a href="../index.html#home">Home</a> · <a href="../index.html#leasing">Leasing</a> · <a href="./">Properties</a></p>
+        <p><a href="../index.html#building">Building</a> · <a href="../index.html#about">About</a> · <a href="../index.html#contact">Contact</a></p>
+      </div>
+      <div>
+        <h5>Listings</h5>
+        <p>Office · Retail · Warehouse</p>
+        <p>Residential</p>
+      </div>
+    </div>
+    <div class="fine">
+      <span>© 2026 Rock Creek Developments, LLC &amp; Bill Harvey Custom Builder, Inc. &nbsp;|&nbsp; Baker City, Oregon</span>
+      <span>Demo site · sample listings, sample photos and placeholder contact details</span>
+    </div>
+  </div>
+</footer>
+
+<!-- lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <button type="button" class="x" id="lbClose" aria-label="Close">×</button>
+  <button type="button" class="lbnav prev" id="lbPrev" aria-label="Previous photo">‹</button>
+  <figure><div class="lbimg"><img id="lbImg" alt=""><span class="flag" id="lbFlag">SAMPLE PHOTO</span></div><figcaption id="lbCap"></figcaption></figure>
+  <button type="button" class="lbnav next" id="lbNext" aria-label="Next photo">›</button>
+</div>
+
+<!-- in-page confirm -->
+<div class="modal" id="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalMsg" hidden>
+  <div class="mbox">
+    <p id="modalMsg"></p>
+    <div class="mbtns"><button type="button" class="btn o sm" id="modalCancel">Cancel</button><button type="button" class="btn n sm danger-fill" id="modalOk">OK</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="listings.js"></script>
+<script src="properties.js"></script>
+</body>
+</html>
