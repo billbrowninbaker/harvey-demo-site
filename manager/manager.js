@@ -815,6 +815,44 @@
       '<div style="margin-top:14px">' + (snowRows.length ? table([{ h: "Date", first: true }, { h: "Work" }, { h: "Who" }, { h: "Snow", c: "num" }, { h: "Cost", c: "num" }, { h: "", c: "" }], snowRows) : "<p>No snow logged yet.</p>") + "</div>";
   }
 
+  /* ---- internet & network (PROPOSED add-on, Bill's idea 11/6) ---- */
+  function vNetwork() {
+    var devices = { sA: null, sB: 14, sC: 6, sD: 11, sE: null, sF: 5, sG: 7, sH: 4 };
+    var speed = { sB: "938 / 921", sC: "941 / 930", sD: "936 / 918", sF: "940 / 925", sG: "52 / 48", sH: "939 / 927" };
+    var rows = S.units.map(function (u, i) {
+      var t = occupant(u.id), state = t && /State office/.test(t.name), vacant = !t && !u.ownerUse;
+      var who = state ? esc(t.name) : t ? esc(shortName(t)) : u.ownerUse ? "Rock Creek office" : "Vacant";
+      var net = state ? "Own state network (not on the building network)" : vacant ? "Ready on move-in day" : "Private network " + (10 + i) + " · Wi-Fi “RC-" + u.suite.replace("Suite ", "") + "”";
+      var st = state ? pill("closed", "Not connected") : vacant ? pill("draft", "Standby") : u.id === "sG" ? pill("overdue", "Slow — check") : pill("paid", "Online");
+      return ['<span class="tname">' + esc(u.suite) + "</span>", who, esc(net), devices[u.id] == null ? "—" : String(devices[u.id]), speed[u.id] ? esc(speed[u.id]) + " Mbps" : "—", st];
+    });
+    var connected = S.units.filter(function (u) { var t = occupant(u.id); return (t && !/State office/.test(t.name)) || u.ownerUse; }).length;
+    var outages = [
+      ["Oct 14", "22 min", "Provider line down (area outage)", "Provider; Kriisko notified tenants by text"],
+      ["Sep 3", "6 min", "Firewall update (scheduled, after hours)", "Kriisko"],
+      ["Aug 19", "1 hr 40 min", "Power blip, switch rebooted", "Onsite management + Kriisko"]
+    ];
+    var extras = [
+      ["Nightly backups", "Each suite's computers backed up to the building's secure server", "3 tenants"],
+      ["Shared file storage", "Private storage per tenant on the secure server, reachable from the office and home", "2 tenants"],
+      ["Private AI", "An AI assistant that runs on the building's server, so documents never leave the building", "1 tenant (trial)"]
+    ];
+    return vhead("Proposed add-on", "Internet & network", "Fast business internet in every suite, included in rent, with each suite on its own private network. Managed by Kriisko Studios / Baker County AI. PROPOSED: not a current Rock Creek service; provider, speeds and prices are samples.") +
+      '<p class="callout blue">The pitch: you already include utilities. Add the best internet in Baker City as one of them, so a new tenant is online the day they move in.</p>' +
+      '<div class="cards4">' + stat("Building line", "1 Gbps <small>fiber (sample)</small>", "<p>Business line from the best local provider; plan must allow sharing</p>") +
+      stat("Suites connected", connected + " <small>of " + S.units.length + "</small>", "<p>State office stays on its own network</p>") +
+      stat("Provider bill", "$450 <small>/mo (sample)</small>", "<p>Owner expense, like the other utilities</p>") +
+      stat("Needs attention", "1", "<p>Suite G running slow</p>", null, "warn") + "</div>" +
+      '<h2 class="sec">Suites</h2>' +
+      table([{ h: "Suite", first: true }, { h: "Who" }, { h: "Network" }, { h: "Devices", c: "num" }, { h: "Speed test (down / up)" }, { h: "Status" }], rows) +
+      '<p class="note">Every suite is on its own private network, so tenants can\'t see each other\'s computers or files. Kriisko watches the network and fixes problems; onsite management can see this page.</p>' +
+      '<h2 class="sec">Outages</h2>' +
+      table([{ h: "Date", first: true }, { h: "How long" }, { h: "Cause" }, { h: "Handled by" }], outages) +
+      '<h2 class="sec">Extras tenants can add (secure server)</h2>' +
+      table([{ h: "Extra", first: true }, { h: "What it is" }, { h: "Using it (sample)" }], extras) +
+      '<p class="note">Prices for the network service and extras are Kriisko\'s to set. No uptime or security guarantees are promised here; terms would be in a written care agreement.</p>';
+  }
+
   /* ---- reports ---- */
   function vReports(arg) {
     var months = monthsBetween(addM(THIS_M, -11), THIS_M);
@@ -855,7 +893,7 @@
   }
 
   /* ---------------- router ---------------- */
-  var ROUTES = { dash: vDash, tenants: vTenants, billing: vBilling, invoice: vInvoice, pay: vPay, utilities: vUtil, ads: vAds, maint: vMaint, reports: vReports };
+  var ROUTES = { dash: vDash, tenants: vTenants, billing: vBilling, invoice: vInvoice, pay: vPay, utilities: vUtil, ads: vAds, maint: vMaint, network: vNetwork, reports: vReports };
   var NAVKEY = { invoice: "billing" };
   var firstRender = true;
   function parseHash() {

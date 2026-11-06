@@ -270,3 +270,5 @@ table.inv{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:12px}
 .ph-wrap{position:relative}
 .ph-wrap .flag{top:16px;left:8px}
 @media (max-width:860px){.rt tfoot td:empty{display:none}.rt tfoot td:first-child{font-size:16px;justify-content:flex-start}}
+
+.side .tag,nav .tag{display:inline-block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;background:#d9a441;color:#1c2f45;border-radius:3px;padding:0 5px;margin-left:4px;vertical-align:1px}
