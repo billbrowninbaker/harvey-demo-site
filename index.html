@@ -104,6 +104,12 @@
   .tile h4{font-size:20px;margin:6px 0}
   .tile p{margin:0;font-size:15px;color:#3a454f}
 
+  .owners{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;padding-top:56px}
+  .owners-fig{margin:0}
+  .owners-fig img{display:block;width:100%;height:auto;border-radius:6px;box-shadow:0 14px 40px rgba(28,47,69,.16)}
+  .owners-tx h2{font-size:clamp(28px,3vw,40px);margin:8px 0 14px}
+  .owners-tx p{font-size:17.5px;color:#2b3640;margin:0 0 20px}
+  @media (max-width:860px){.owners{grid-template-columns:1fr;gap:22px;padding-top:36px}}
   .values{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding-top:48px}
   .values div{padding:8px 36px 20px;border-left:1px solid #c9b9a2}
   .values div:first-child{border-left:0}
@@ -273,6 +279,18 @@
   </div>
 
 
+  <section class="wrap owners">
+    <figure class="owners-fig">
+      <img src="img/owners.jpg" alt="Bill and Lorrie Harvey at the Tenth Street Complex sign, with the Elkhorn Mountains behind them">
+    </figure>
+    <div class="owners-tx">
+      <div class="k">Meet the owners</div>
+      <h2>Bill &amp; Lorrie Harvey</h2>
+      <p>Rock Creek Developments has owned and leased office space at the Tenth Street Office Complex since 2007. When you call, you reach the owners, and Bill will show you through the space himself.</p>
+      <div class="btns"><a class="btn n arrow" href="#contact" onclick="pickTopic('lease')">Tour with Bill</a></div>
+    </div>
+  </section>
+
   <section class="wrap values">
     <div>
       <svg width="44" height="30" viewBox="0 0 44 30" aria-hidden="true"><path d="M2 27 L15 9 L21 16 L29 4 L42 27" fill="none" stroke="#7d4524" stroke-width="2" stroke-linejoin="round"/><path d="M26 9 L29 4 L32 9" fill="none" stroke="#7d4524" stroke-width="2"/></svg>
@@ -346,7 +364,7 @@
         <p><b>Rock Creek Developments, LLC</b> is the property management and holding company Bill and Lorrie Harvey use to own, manage, and lease the commercial spaces at the Tenth Street Office Complex.</p>
         <div class="ph-text">Placeholder: add the Harveys' own story here, in their words (how long they have owned property in Baker County, family, why they do it).</div>
       </div>
-      <img src="img/hero.jpg" alt="The Elkhorn Mountains">
+      <img src="img/owners.jpg" alt="Bill and Lorrie Harvey at the Tenth Street Complex">
     </div>
   </section>
 </div>
