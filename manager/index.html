@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manager (Demo) — Rock Creek Developments</title>
+<meta name="description" content="Demo back office for Rock Creek Developments: rent billing, utilities, advertising, maintenance and reports. Sample data only.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../properties/properties.css">
+<link rel="stylesheet" href="manager.css">
+</head>
+<body>
+
+<a class="skip" href="#view">Skip to content</a>
+<div class="demo-bar">Demo back office — sample tenants and numbers. Nothing is emailed, charged or paid.</div>
+
+<header>
+  <div class="wrap hbar">
+    <a class="brand" href="../index.html#home">
+      <svg width="52" height="52" viewBox="0 0 54 54" aria-hidden="true">
+        <circle cx="27" cy="27" r="25.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+        <path d="M9 36 L20 21 L25 27 L32 15 L45 36 Z" fill="#fff"/>
+        <path d="M29.4 19.4 L32 15 L34.8 19.8 L32.6 18.6 L31 20.4 Z" fill="#1c2f45"/>
+        <path d="M17.6 24.4 L20 21 L22.2 23.8 L20.4 23.2 Z" fill="#1c2f45"/>
+      </svg>
+      <div>
+        <div class="t1">ROCK CREEK DEVELOPMENTS</div>
+        <div class="t2">PROPERTY MANAGEMENT &amp; LEASING</div>
+        <div class="t3">BAKER CITY, OREGON</div>
+      </div>
+    </a>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mainNav" id="burger">☰ Menu</button>
+    <nav class="main" id="mainNav" aria-label="Website">
+      <a href="../index.html#home">Home</a><a href="../index.html#leasing">Leasing</a><a href="../properties/">Properties</a>
+      <a href="./" class="on" aria-current="page">Manager</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ fake sign-in ============ -->
+<section id="login" class="login" hidden>
+  <div class="wrap">
+    <div class="login-card">
+      <span class="stag">DEMO</span>
+      <h1>Manager sign-in</h1>
+      <p><b>Demo — click Enter as manager.</b> There are no accounts or passwords in this demo. The real version would use a proper sign-in for Bill and Lorrie only.</p>
+      <button type="button" class="btn n full arrow" id="enterBtn">Enter as manager</button>
+      <p class="note">Everything inside is sample data: made-up tenants, rents and bills. Nothing is emailed, charged or paid.</p>
+      <p class="login-links"><a href="../index.html">← Back to the website</a> · <a href="../properties/">Properties</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ back office ============ -->
+<div id="app" hidden>
+  <div class="admin-bar mgr-bar">
+    <div class="wrap-wide mgr-bar-in">
+      <span><b>MANAGER</b> · Tenth Street Office Complex · signed in as <i>Demo manager</i></span>
+      <span class="mgr-bar-btns">
+        <button type="button" class="linkbtn gold" id="resetBtn">Reset demo data</button>
+        <button type="button" class="linkbtn gold" id="signOutBtn">Sign out</button>
+      </span>
+    </div>
+  </div>
+  <div class="store-warn" id="storeWarn" hidden>This browser is blocking storage, so changes last only until you reload the page.</div>
+
+  <div class="wrap-wide mlayout">
+    <nav class="mnav" id="mnav" aria-label="Manager sections">
+      <a href="#dash" data-r="dash">Dashboard</a>
+      <a href="#tenants" data-r="tenants">Tenants &amp; leases</a>
+      <a href="#billing" data-r="billing">Billing</a>
+      <a href="#pay" data-r="pay">Tenant pay page</a>
+      <a href="#utilities" data-r="utilities">Utilities</a>
+      <a href="#ads" data-r="ads">Advertising</a>
+      <a href="#maint" data-r="maint">Maintenance</a>
+      <a href="#reports" data-r="reports">Reports</a>
+    </nav>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fin">
+      <div>
+        <h5>Rock Creek Developments, LLC</h5>
+        <p>3370 Tenth Street, Suite F, Baker City, OR 97814</p>
+        <p>(541) 523-9048 &nbsp;|&nbsp; rockcreekdevelopments@gmail.com</p>
+      </div>
+      <div>
+        <h5>Quick Links</h5>
+        <p><a href="../index.html#home">Home</a> · <a href="../index.html#leasing">Leasing</a> · <a href="../properties/">Properties</a></p>
+        <p><a href="../index.html#contact">Contact</a> · <a href="./">Manager (demo)</a></p>
+      </div>
+      <div>
+        <h5>Back office demo</h5>
+        <p>Sample tenants, rents and bills</p>
+        <p>Saved only in this browser</p>
+      </div>
+    </div>
+    <div class="fine">
+      <span>© 2026 Rock Creek Developments, LLC &nbsp;|&nbsp; Baker City, Oregon</span>
+      <span>Demo back office · sample data · no real payments</span>
+    </div>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlgTitle"><div id="dlgBody"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../properties/listings.js"></script>
+<script src="data.js"></script>
+<script src="manager.js"></script>
+</body>
+</html>

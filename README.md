@@ -12,6 +12,7 @@ Plain static HTML, CSS and JS with no build step. Open `index.html` through any 
 |---|---|
 | `index.html` | Home, Leasing, About and Contact. Pages switch by URL hash (`#leasing`, `#about`, …). |
 | `properties/` | Property listings: filterable list, map with a pin per property, a detail page per property, and an Admin mode that adds, edits and marks properties (saved in the browser for the demo). |
+| `manager/` | **Manager back office (demo):** dashboard, tenants & leases (full service: utilities included except janitorial, phone and data), rent billing with invoices and late fees, a tenant pay page preview, utilities as an owner expense tracker, advertising drafts for Facebook / Marketplace / Craigslist / website, maintenance with a snow-removal log, and reports with CSV export. Sample data, saved in the browser. |
 | `img/` | The hero landscape and sample photos. |
 | `design/` | The original design mockups. |
 
