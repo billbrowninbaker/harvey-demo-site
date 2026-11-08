@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Manager (Demo) — Rock Creek Developments</title>
-<meta name="description" content="Demo back office for Rock Creek Developments: rent billing, utilities, advertising, maintenance and reports. Sample data only.">
+<meta name="description" content="Demo manager page for Rock Creek Developments: rent, suites and leases, and repairs. Sample data only.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="../properties/properties.css">
@@ -13,7 +13,7 @@
 <body>
 
 <a class="skip" href="#view">Skip to content</a>
-<div class="demo-bar">Demo back office — sample tenants and numbers. Nothing is emailed, charged or paid.</div>
+<div class="demo-bar">Demo manager page: sample tenants and numbers, saved only in this browser.</div>
 
 <header>
   <div class="wrap hbar">
@@ -45,19 +45,19 @@
     <div class="login-card">
       <span class="stag">DEMO</span>
       <h1>Manager sign-in</h1>
-      <p><b>Demo — click Enter as manager.</b> There are no accounts or passwords in this demo. The real version would use a proper sign-in for Bill and Lorrie only.</p>
+      <p><b>Demo: click Enter as manager.</b> There are no accounts or passwords in this demo. The real version would use a proper sign-in for Bill and Lorrie only.</p>
       <button type="button" class="btn n full arrow" id="enterBtn">Enter as manager</button>
-      <p class="note">Everything inside is sample data: made-up tenants, rents and bills. Nothing is emailed, charged or paid.</p>
+      <p class="note">Everything inside is sample data: made-up tenants, rents and repairs.</p>
       <p class="login-links"><a href="../index.html">← Back to the website</a> · <a href="../properties/">Properties</a></p>
     </div>
   </div>
 </section>
 
-<!-- ============ back office ============ -->
+<!-- ============ manager page ============ -->
 <div id="app" hidden>
   <div class="admin-bar mgr-bar">
-    <div class="wrap-wide mgr-bar-in">
-      <span><b>MANAGER</b> · Tenth Street Office Complex · signed in as <i>Demo manager</i></span>
+    <div class="wrap mgr-bar-in">
+      <span><b>MANAGER</b> · Tenth Street Office Complex</span>
       <span class="mgr-bar-btns">
         <button type="button" class="linkbtn gold" id="resetBtn">Reset demo data</button>
         <button type="button" class="linkbtn gold" id="signOutBtn">Sign out</button>
@@ -66,21 +66,60 @@
   </div>
   <div class="store-warn" id="storeWarn" hidden>This browser is blocking storage, so changes last only until you reload the page.</div>
 
-  <div class="wrap-wide mlayout">
-    <nav class="mnav" id="mnav" aria-label="Manager sections">
-      <a href="#dash" data-r="dash">Dashboard</a>
-      <a href="#tenants" data-r="tenants">Tenants &amp; leases</a>
-      <a href="#billing" data-r="billing">Billing</a>
-      <a href="#pay" data-r="pay">Tenant pay page</a>
-      <a href="#utilities" data-r="utilities">Utilities</a>
-      <a href="#ads" data-r="ads">Advertising</a>
-      <a href="#maint" data-r="maint">Maintenance</a>
-      <a href="#network" data-r="network">Internet &amp; network <span class="tag">proposed</span></a>
-      <a href="#reports" data-r="reports">Reports</a>
-    </nav>
-    <main id="view" tabindex="-1"></main>
-  </div>
+  <main class="wrap mpage" id="view">
+    <h1>Tenth Street Office Complex</h1>
+    <div class="summary" id="summary"></div>
+
+    <div class="cols">
+      <div>
+        <section class="panel" aria-labelledby="rentH">
+          <h2 id="rentH">Rent
+            <span class="monthnav"><button type="button" id="prevMonth" aria-label="Previous month">‹</button>
+              <span id="rentMonth"></span>
+              <button type="button" id="nextMonth" aria-label="Next month">›</button></span>
+          </h2>
+          <table class="t">
+            <thead><tr><th>Suite</th><th>Tenant</th><th class="num">Rent</th><th>Status</th></tr></thead>
+            <tbody id="rentRows"></tbody>
+          </table>
+        </section>
+
+        <section class="panel" aria-labelledby="suitesH">
+          <h2 id="suitesH">Suites &amp; leases</h2>
+          <table class="t">
+            <thead><tr><th>Suite</th><th>Tenant</th><th class="num">Rent</th><th>Lease ends</th><th></th></tr></thead>
+            <tbody id="suiteRows"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <section class="panel" aria-labelledby="todoH">
+        <h2 id="todoH">Repairs &amp; to-do</h2>
+        <form class="addrow" id="todoForm">
+          <input name="text" placeholder="What needs fixing?" aria-label="What needs fixing" autocomplete="off">
+          <select name="suite" aria-label="Where"></select>
+          <button type="submit" class="btn xs t">Add</button>
+        </form>
+        <ul class="todo" id="todoOpen"></ul>
+        <details id="doneWrap"><summary>Recently done</summary><ul class="todo" id="todoDone"></ul></details>
+      </section>
+    </div>
+  </main>
 </div>
+
+<dialog id="dlg" aria-labelledby="editTitle">
+  <form id="editForm">
+    <h3 id="editTitle"></h3>
+    <label>Tenant<input name="tenant" placeholder="Leave blank if the suite is empty" autocomplete="off"></label>
+    <label>Phone<input name="phone" type="tel" autocomplete="off"></label>
+    <label>Monthly rent ($)<input name="rent" type="number" min="0" step="1" inputmode="numeric"></label>
+    <label>Lease ends<input name="leaseEnd" type="date"></label>
+    <div class="dlg-btns">
+      <button type="button" class="linkbtn" id="vacateBtn">Mark empty</button>
+      <span><button type="button" class="btn xs o" id="cancelEdit">Cancel</button><button type="submit" class="btn xs n">Save</button></span>
+    </div>
+  </form>
+</dialog>
 
 <footer>
   <div class="wrap">
@@ -96,22 +135,20 @@
         <p><a href="../index.html#contact">Contact</a> · <a href="./">Manager (demo)</a></p>
       </div>
       <div>
-        <h5>Back office demo</h5>
-        <p>Sample tenants, rents and bills</p>
+        <h5>Manager demo</h5>
+        <p>Sample tenants, rents and repairs</p>
         <p>Saved only in this browser</p>
       </div>
     </div>
     <div class="fine">
       <span>© 2026 Rock Creek Developments, LLC &nbsp;|&nbsp; Baker City, Oregon</span>
-      <span>Demo back office · sample data · no real payments</span>
+      <span>Manager demo · sample data</span>
     </div>
   </div>
 </footer>
 
-<dialog id="dlg" aria-labelledby="dlgTitle"><div id="dlgBody"></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="../properties/listings.js"></script>
 <script src="data.js"></script>
 <script src="manager.js"></script>
 </body>
